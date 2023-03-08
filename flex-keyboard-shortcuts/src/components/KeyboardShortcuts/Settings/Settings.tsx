@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import * as Flex from '@twilio/flex-ui';
-import { Button, Heading, Stack, Paragraph, Card } from '@twilio-paste/core';
+import { Button, Heading, Stack } from '@twilio-paste/core';
+import { Card, Paragraph, Switch } from '@twilio-paste/core';
 
-interface MyProps {
+interface SettingsProps {
   setShortcuts: ([]) => void;
 }
 
-const Settings = (props: MyProps) => {
+const Settings = (props: SettingsProps) => {
+  const [throttling, setThrottling] = useState(false);
+  const [deleteShortcut, setDeleteShortcut] = useState(false);
+
   const clickHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
     props.setShortcuts([]);
@@ -27,14 +32,16 @@ const Settings = (props: MyProps) => {
             Default value is 50ms to prevent Flex from being overloaded by
             repeated firings, and to provide a more seamless visual experience.
           </Paragraph>
-          <Button
-            variant="primary"
-            onClick={() => {
-              console.log(' Enable key throttling');
+          <Switch
+            value="throttling"
+            checked={throttling}
+            onChange={() => {
+              setThrottling(!throttling);
+              console.log('Enable key throttling');
             }}
           >
             Enable key throttling
-          </Button>
+          </Switch>
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
@@ -44,14 +51,16 @@ const Settings = (props: MyProps) => {
             This setting enables the Agent to delete individual keyboard
             shortcut mappings.
           </Paragraph>
-          <Button
-            variant="destructive"
-            onClick={() => {
+          <Switch
+            value="delete"
+            checked={deleteShortcut}
+            onChange={() => {
+              setDeleteShortcut(!deleteShortcut);
               console.log('Delete individual shortcuts');
             }}
           >
             Delete individual shortcuts
-          </Button>
+          </Switch>
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
