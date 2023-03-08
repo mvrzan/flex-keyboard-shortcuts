@@ -1,25 +1,12 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-
 import * as Flex from '@twilio/flex-ui';
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalFooterActions,
-  ModalHeader,
-  ModalHeading,
-} from '@twilio-paste/core/modal';
-import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
-import {
-  Box,
-  Button,
-  Grid,
-  Column,
-  Label,
-  Input,
-  Separator,
-} from '@twilio-paste/core';
 import { useUID } from '@twilio-paste/core/uid-library';
+
+import { ModalHeading, ModalFooterActions } from '@twilio-paste/core';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
+import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
+import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
+import { Grid, Column } from '@twilio-paste/core';
 
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 
@@ -128,7 +115,7 @@ const ModalWindow = ({
                       value={newShortcut}
                     />
                   </Stack>
-                  <Stack orientation="vertical" spacing="space30">
+                  {/* <Stack orientation="vertical" spacing="space30">
                     <Label htmlFor="test">Action name</Label>
                     <Input
                       onChange={e => setActionName(e.currentTarget.value)}
@@ -136,7 +123,7 @@ const ModalWindow = ({
                       type="text"
                       value={actionName}
                     />
-                  </Stack>
+                  </Stack> */}
                   <Stack orientation="vertical" spacing="space30">
                     <Label htmlFor="test">Throttle</Label>
                     <Input

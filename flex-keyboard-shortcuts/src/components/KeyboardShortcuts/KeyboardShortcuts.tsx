@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useUID } from '@twilio-paste/core/uid-library';
 
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
 import { Box, Tooltip, Text, Heading, Stack } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { useUID } from '@twilio-paste/core/uid-library';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
 import EditButton from './EditButton';
@@ -96,8 +96,8 @@ const KeyboardShortcuts = () => {
                       <Td>{item.actionName}</Td>
                       <Td>
                         <EditButton
-                          shortcut={item.key}
-                          action={item.actionName}
+                          shortcutKey={item.key}
+                          actionName={item.actionName}
                           openModalHandler={openModalHandler}
                         />
                       </Td>

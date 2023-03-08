@@ -1,15 +1,19 @@
 import { Button } from '@twilio-paste/core';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 
-interface ButtonProps {
-  shortcut: string;
-  action: string;
-  openModalHandler: (shortcut: string, action: string) => void;
+interface EditButtonProps {
+  shortcutKey: string;
+  actionName: string;
+  openModalHandler: (shortcutKey: string, actionName: string) => void;
 }
 
-const EditButton = ({ shortcut, action, openModalHandler }: ButtonProps) => {
-  const clickHandler = (shortcut: string, action: string) => {
-    openModalHandler(shortcut, action);
+const EditButton = ({
+  shortcutKey,
+  actionName,
+  openModalHandler,
+}: EditButtonProps) => {
+  const clickHandler = (shortcutKey: string, actionName: string): void => {
+    openModalHandler(shortcutKey, actionName);
   };
 
   return (
@@ -17,7 +21,7 @@ const EditButton = ({ shortcut, action, openModalHandler }: ButtonProps) => {
       variant="primary_icon"
       size="reset"
       onClick={() => {
-        clickHandler(shortcut, action);
+        clickHandler(shortcutKey, actionName);
       }}
     >
       <EditIcon decorative={false} title="Edit" />
