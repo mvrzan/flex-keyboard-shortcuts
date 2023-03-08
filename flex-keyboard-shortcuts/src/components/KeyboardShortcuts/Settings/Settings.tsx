@@ -2,22 +2,34 @@ import { useState } from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
 interface SettingsProps {
   setShortcuts: ([]) => void;
 }
 
-const Settings = (props: SettingsProps) => {
+const Settings = ({ setShortcuts }: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
+  const toaster = useToaster();
+
+  const toasterShortcutsDisabledNotification = () => {
+    toaster.push({
+      message: `All keyboard shortcuts have been disabled.`,
+      variant: 'error',
+      dismissAfter: 3000,
+    });
+  };
 
   const clickHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
-    props.setShortcuts([]);
+    setShortcuts([]);
+    toasterShortcutsDisabledNotification();
   };
 
   return (
     <>
+      <Toaster {...toaster} />
       <Heading as="h3" variant="heading30">
         Keyboard shortcuts settings
       </Heading>

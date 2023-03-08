@@ -59,7 +59,11 @@ const KeyboardShortcuts = () => {
       <Heading as="h1" variant="heading10">
         My Shortcut Settings
       </Heading>
-      <Tabs selectedId={randomComponentId} baseId="vertical-tabs-example">
+      <Tabs
+        selectedId={randomComponentId}
+        baseId="vertical-tabs-example"
+        orientation="vertical"
+      >
         <TabList aria-label="Vertical product tabs">
           <Tab id={randomComponentId}>Default keyboard shortcuts</Tab>
           <Tab>Custom keyboard shortcuts</Tab>
