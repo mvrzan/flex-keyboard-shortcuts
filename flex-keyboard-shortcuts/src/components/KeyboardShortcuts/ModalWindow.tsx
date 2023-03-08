@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useState } from 'react';
+
 import * as Flex from '@twilio/flex-ui';
 import {
   Modal,
@@ -18,7 +20,6 @@ import {
   Separator,
 } from '@twilio-paste/core';
 import { useUID } from '@twilio-paste/core/uid-library';
-import { useState } from 'react';
 
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 
@@ -29,19 +30,21 @@ interface ShortcutsObject {
 }
 
 interface ModalProps {
-  isModalOpen: boolean;
-  shortcut: string;
+  isEditModalOpen: boolean;
+  selectedShortcut: string;
   action: string;
   closeModalHandler: () => void;
-  setShortcuts: (test: ShortcutsObject[]) => ShortcutsObject[];
+  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  toasterClickHandler: () => void;
 }
 
 const ModalWindow = ({
-  isModalOpen,
+  isEditModalOpen,
   closeModalHandler,
-  shortcut,
+  selectedShortcut,
   action,
   setShortcuts,
+  toasterClickHandler,
 }: ModalProps) => {
   const [actionName, setActionName] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
@@ -49,30 +52,19 @@ const ModalWindow = ({
   const modalHeadingID = useUID();
   const titleInputID = useUID();
 
-  //   const saveHandler = (oldKey: string, newKey: string, actionName: string) => {
-  //     console.log(oldKey, newKey);
-  //     Flex.KeyboardShortcutManager.remapShortcut(oldKey, newKey, {
-  //       action: Flex.defaultActions.toggleActivityMenu,
-  //       name: 'New Shortcut Name',
-  //       throttle: 0,
-  //     });
-  //     getShortcuts();
-  //     setIsModalOpen(true);
-  //   };
-
   const saveHandler = () => {
     Flex.KeyboardShortcutManager.remapShortcut(action, newShortcut);
     closeModalHandler();
-    const test = getShortcuts();
-    setShortcuts(test);
+    setShortcuts(getShortcuts());
+    toasterClickHandler();
   };
 
-  console.log('From Modal', 'shortcut', shortcut, 'action', action);
+  console.log('From Modal', 'shortcut', selectedShortcut, 'action', action);
   return (
     <Modal
       ariaLabelledby={modalHeadingID}
       size="default"
-      isOpen={isModalOpen}
+      isOpen={isEditModalOpen}
       onDismiss={closeModalHandler}
     >
       <ModalHeader>
@@ -99,7 +91,7 @@ const ModalWindow = ({
                   <TBody>
                     <Tr>
                       <Td>{action}</Td>
-                      <Td>{shortcut}</Td>
+                      <Td>{selectedShortcut}</Td>
                       <Td>Nothing</Td>
                     </Tr>
                   </TBody>

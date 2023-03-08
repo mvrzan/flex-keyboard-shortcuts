@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-} from '@twilio-paste/core/tabs';
-import { useUID } from '@twilio-paste/core/uid-library';
-import { Heading, Box, Tooltip, Text } from '@twilio-paste/core';
+import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
+import { Box, Tooltip, Text, Heading } from '@twilio-paste/core';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { useUID } from '@twilio-paste/core/uid-library';
 
 import EditButton from './EditButton';
 import ModalWindow from './ModalWindow';
@@ -24,19 +19,29 @@ interface ShortcutsObject {
 
 const KeyboardShortcuts = () => {
   const [shortcuts, setShortcuts] = useState<ShortcutsObject[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [shortcut, setShortcut] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedShortcut, setSelectedShortcut] = useState('');
   const [action, setAction] = useState('');
   const selectedId = useUID();
+  const toaster = useToaster();
+
+  const toasterClickHandler = () => {
+    toaster.push({
+      message:
+        'Keyboard shortcut Toggle Activity Menu modified successfully from S to 5!',
+      variant: 'success',
+      dismissAfter: 2000,
+    });
+  };
 
   const openModalHandler = (shortcut: string, action: string) => {
-    setIsModalOpen(true);
-    setShortcut(shortcut);
+    setIsEditModalOpen(true);
+    setSelectedShortcut(shortcut);
     setAction(action);
   };
 
   const closeModalHandler = () => {
-    setIsModalOpen(false);
+    setIsEditModalOpen(false);
     getShortcuts();
   };
 
@@ -55,6 +60,7 @@ const KeyboardShortcuts = () => {
           <Tab id={selectedId}>Default keyboard shortcuts</Tab>
           <Tab>Custom keyboard shortcuts</Tab>
           <Tab>Settings</Tab>
+          <Toaster {...toaster} />
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -104,13 +110,14 @@ const KeyboardShortcuts = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-      {isModalOpen && (
+      {isEditModalOpen && (
         <ModalWindow
-          isModalOpen={isModalOpen}
+          isEditModalOpen={isEditModalOpen}
           closeModalHandler={closeModalHandler}
-          shortcut={shortcut}
+          selectedShortcut={selectedShortcut}
           action={action}
           setShortcuts={setShortcuts}
+          toasterClickHandler={toasterClickHandler}
         />
       )}
     </Box>
