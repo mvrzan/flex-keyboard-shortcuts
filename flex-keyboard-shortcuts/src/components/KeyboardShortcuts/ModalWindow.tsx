@@ -9,6 +9,7 @@ import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
 import { Grid, Column } from '@twilio-paste/core';
 
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
+import KeyCommand from './KeyCommand';
 
 interface ShortcutsObject {
   key: string;
@@ -46,7 +47,7 @@ const ModalWindow = ({
   const saveHandler = () => {
     Flex.KeyboardShortcutManager.remapShortcut(
       selectedShortcutKey,
-      newShortcut
+      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut
     );
     closeModalHandler();
     setShortcuts(getShortcuts());
@@ -80,15 +81,17 @@ const ModalWindow = ({
                 <Table>
                   <THead>
                     <Tr>
-                      <Th>Current shortcut</Th>
                       <Th>Action name</Th>
+                      <Th>Current shortcut</Th>
                       <Th>Throttle</Th>
                     </Tr>
                   </THead>
                   <TBody>
                     <Tr>
                       <Td>{selectedActionName}</Td>
-                      <Td>{selectedShortcutKey}</Td>
+                      <Td>
+                        <KeyCommand keyCommand={selectedShortcutKey} />
+                      </Td>
                       <Td>Nothing</Td>
                     </Tr>
                   </TBody>
@@ -113,6 +116,7 @@ const ModalWindow = ({
                       id={titleInputID}
                       type="text"
                       value={newShortcut}
+                      maxLength={1}
                     />
                   </Stack>
                   {/* <Stack orientation="vertical" spacing="space30">

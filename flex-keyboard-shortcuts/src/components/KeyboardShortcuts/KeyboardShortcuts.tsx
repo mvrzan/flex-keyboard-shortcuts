@@ -7,6 +7,7 @@ import { Box, Tooltip, Text, Heading, Stack } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
+import KeyCommand from './KeyCommand';
 import EditButton from './EditButton';
 import ModalWindow from './ModalWindow';
 import Settings from './Settings/Settings';
@@ -35,7 +36,7 @@ const KeyboardShortcuts = () => {
       message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut}!
       Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut}`,
       variant: 'success',
-      dismissAfter: 3000,
+      dismissAfter: 6000,
     });
   };
 
@@ -50,8 +51,7 @@ const KeyboardShortcuts = () => {
   };
 
   useEffect(() => {
-    const shortcutValues = getShortcuts();
-    setShortcuts(shortcutValues);
+    setShortcuts(getShortcuts());
   }, []);
 
   return (
@@ -95,8 +95,13 @@ const KeyboardShortcuts = () => {
                 {shortcuts.map(item => {
                   return (
                     <Tr key={item.key}>
-                      <Td>Ctrl + Shift</Td>
-                      <Td>{item.key}</Td>
+                      <Td>
+                        <KeyCommand keyCommand="Ctrl" /> +{' '}
+                        <KeyCommand keyCommand="Shift" />
+                      </Td>
+                      <Td>
+                        <KeyCommand keyCommand={item.key} />{' '}
+                      </Td>
                       <Td>{item.actionName}</Td>
                       <Td>
                         <EditButton
