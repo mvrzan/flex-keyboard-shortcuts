@@ -31,20 +31,24 @@ interface ShortcutsObject {
 
 interface ModalProps {
   isEditModalOpen: boolean;
-  selectedShortcut: string;
-  action: string;
+  selectedShortcutKey: string;
+  selectedActionName: string;
   closeModalHandler: () => void;
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
-  toasterClickHandler: () => void;
+  toasterSuccessNotification: (
+    actionName: string,
+    oldShortcut: string,
+    newShortcut: string
+  ) => void;
 }
 
 const ModalWindow = ({
   isEditModalOpen,
   closeModalHandler,
-  selectedShortcut,
-  action,
+  selectedShortcutKey,
+  selectedActionName,
   setShortcuts,
-  toasterClickHandler,
+  toasterSuccessNotification,
 }: ModalProps) => {
   const [actionName, setActionName] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
@@ -53,13 +57,19 @@ const ModalWindow = ({
   const titleInputID = useUID();
 
   const saveHandler = () => {
-    Flex.KeyboardShortcutManager.remapShortcut(action, newShortcut);
+    Flex.KeyboardShortcutManager.remapShortcut(
+      selectedShortcutKey,
+      newShortcut
+    );
     closeModalHandler();
     setShortcuts(getShortcuts());
-    toasterClickHandler();
+    toasterSuccessNotification(
+      selectedActionName,
+      selectedShortcutKey,
+      newShortcut
+    );
   };
 
-  console.log('From Modal', 'shortcut', selectedShortcut, 'action', action);
   return (
     <Modal
       ariaLabelledby={modalHeadingID}
@@ -90,8 +100,8 @@ const ModalWindow = ({
                   </THead>
                   <TBody>
                     <Tr>
-                      <Td>{action}</Td>
-                      <Td>{selectedShortcut}</Td>
+                      <Td>{selectedActionName}</Td>
+                      <Td>{selectedShortcutKey}</Td>
                       <Td>Nothing</Td>
                     </Tr>
                   </TBody>

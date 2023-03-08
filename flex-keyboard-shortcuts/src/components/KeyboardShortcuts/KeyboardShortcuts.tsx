@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
-import { Box, Tooltip, Text, Heading } from '@twilio-paste/core';
+import { Box, Tooltip, Text, Heading, Stack } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { useUID } from '@twilio-paste/core/uid-library';
+import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
 import EditButton from './EditButton';
 import ModalWindow from './ModalWindow';
@@ -20,29 +21,32 @@ interface ShortcutsObject {
 const KeyboardShortcuts = () => {
   const [shortcuts, setShortcuts] = useState<ShortcutsObject[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedShortcut, setSelectedShortcut] = useState('');
-  const [action, setAction] = useState('');
-  const selectedId = useUID();
+  const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
+  const [selectedActionName, setSelectedActionName] = useState('');
+  const randomComponentId = useUID();
   const toaster = useToaster();
 
-  const toasterClickHandler = () => {
+  const toasterSuccessNotification = (
+    actionName: string,
+    oldShortcut: string,
+    newShortcut: string
+  ) => {
     toaster.push({
-      message:
-        'Keyboard shortcut Toggle Activity Menu modified successfully from S to 5!',
+      message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut}!
+      Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut}`,
       variant: 'success',
-      dismissAfter: 2000,
+      dismissAfter: 3000,
     });
   };
 
   const openModalHandler = (shortcut: string, action: string) => {
     setIsEditModalOpen(true);
-    setSelectedShortcut(shortcut);
-    setAction(action);
+    setSelectedShortcutKey(shortcut);
+    setSelectedActionName(action);
   };
 
   const closeModalHandler = () => {
     setIsEditModalOpen(false);
-    getShortcuts();
   };
 
   useEffect(() => {
@@ -55,9 +59,9 @@ const KeyboardShortcuts = () => {
       <Heading as="h1" variant="heading10">
         My Shortcut Settings
       </Heading>
-      <Tabs selectedId={selectedId} baseId="vertical-tabs-example">
+      <Tabs selectedId={randomComponentId} baseId="vertical-tabs-example">
         <TabList aria-label="Vertical product tabs">
-          <Tab id={selectedId}>Default keyboard shortcuts</Tab>
+          <Tab id={randomComponentId}>Default keyboard shortcuts</Tab>
           <Tab>Custom keyboard shortcuts</Tab>
           <Tab>Settings</Tab>
           <Toaster {...toaster} />
@@ -71,9 +75,12 @@ const KeyboardShortcuts = () => {
               <THead>
                 <Tr>
                   <Th>
-                    <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
-                      <Text as="p">Modifiers</Text>
-                    </Tooltip>
+                    <Stack orientation="horizontal" spacing="space30">
+                      <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
+                        <Text as="span">Modifiers</Text>
+                      </Tooltip>
+                      <InformationIcon decorative={false} title="modifiers" />
+                    </Stack>
                   </Th>
                   <Th>Shortcuts</Th>
                   <Th>Actions</Th>
@@ -89,8 +96,8 @@ const KeyboardShortcuts = () => {
                       <Td>{item.actionName}</Td>
                       <Td>
                         <EditButton
-                          shortcut={item.actionName}
-                          action={item.key}
+                          shortcut={item.key}
+                          action={item.actionName}
                           openModalHandler={openModalHandler}
                         />
                       </Td>
@@ -114,10 +121,10 @@ const KeyboardShortcuts = () => {
         <ModalWindow
           isEditModalOpen={isEditModalOpen}
           closeModalHandler={closeModalHandler}
-          selectedShortcut={selectedShortcut}
-          action={action}
+          selectedShortcutKey={selectedShortcutKey}
+          selectedActionName={selectedActionName}
           setShortcuts={setShortcuts}
-          toasterClickHandler={toasterClickHandler}
+          toasterSuccessNotification={toasterSuccessNotification}
         />
       )}
     </Box>
