@@ -4,6 +4,7 @@ import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 interface OwnProps {
   activeView?: string;
   viewName: string;
+  children?: React.ReactNode;
 }
 
 const SideNavigationIcon = (props: OwnProps) => {
