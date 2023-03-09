@@ -22,6 +22,11 @@ const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
     });
   };
 
+  const throttlingHandler = () => {
+    setThrottling(!throttling);
+    setIsThrottleEnabled(!throttling);
+  };
+
   const clickHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
     setShortcuts([]);
@@ -48,11 +53,7 @@ const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
           <Switch
             value="throttling"
             checked={throttling}
-            onChange={() => {
-              setThrottling(!throttling);
-              setIsThrottleEnabled(!throttling);
-              console.log('Enable key throttling');
-            }}
+            onChange={throttlingHandler}
           >
             Enable key throttling
           </Switch>

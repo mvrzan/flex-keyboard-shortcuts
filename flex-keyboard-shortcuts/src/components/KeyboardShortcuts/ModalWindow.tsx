@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
 
@@ -44,14 +44,23 @@ const ModalWindow = ({
 }: ModalProps) => {
   const [throttleValue, setThrottleValue] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
+  const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(true);
 
   const modalHeadingID = useUID();
   const titleInputID = useUID();
 
+  // console.log('selectedActionName', selectedActionName);
+  // console.log('newShortcut', typeof newShortcut);
+
   const saveHandler = () => {
     Flex.KeyboardShortcutManager.remapShortcut(
       selectedShortcutKey,
-      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut
+      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
+      {
+        action: Flex.defaultActions.toggleActivityMenu,
+        name: 'Toggle Activity Menu',
+        throttle: +throttleValue,
+      }
     );
     closeModalHandler();
     setShortcuts(getShortcuts());
@@ -61,6 +70,21 @@ const ModalWindow = ({
       newShortcut
     );
   };
+
+  useEffect(() => {
+    console.log('throttleValue', throttleValue);
+    console.log('throttleValue', !isNaN(+throttleValue));
+    if (newShortcut === '') {
+      setIsSaveButtonVisible(false);
+    }
+    if (newShortcut !== '') {
+      setIsSaveButtonVisible(true);
+    }
+
+    if (isNaN(+throttleValue)) {
+      setIsSaveButtonVisible(false);
+    }
+  }, [newShortcut, throttleValue]);
 
   return (
     <Modal
@@ -120,8 +144,11 @@ const ModalWindow = ({
                 </ModalHeading>
                 <Stack orientation="horizontal" spacing="space200">
                   <Stack orientation="vertical" spacing="space30">
-                    <Label htmlFor="new-shortcut">New keyboard shortcut</Label>
+                    <Label htmlFor="new-shortcut" required>
+                      New keyboard shortcut
+                    </Label>
                     <Input
+                      required
                       onChange={e => setNewShortcut(e.currentTarget.value)}
                       id={titleInputID}
                       type="text"
@@ -135,11 +162,12 @@ const ModalWindow = ({
                     <Stack orientation="vertical" spacing="space30">
                       <Label htmlFor="throttle">Throttle</Label>
                       <Input
-                        onChange={e => setThrottleValue(e.currentTarget.value)}
                         id={titleInputID}
                         type="number"
-                        value={throttleValue}
+                        onChange={e => setThrottleValue(e.currentTarget.value)}
+                        hasError={isNaN(+throttleValue)}
                         placeholder="Number in milliseconds"
+                        maxLength={5}
                       />
                       <HelpText>Enter the shortcut throttle</HelpText>
                     </Stack>
@@ -155,7 +183,11 @@ const ModalWindow = ({
           <Button variant="secondary" onClick={closeModalHandler}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={saveHandler}>
+          <Button
+            variant="primary"
+            onClick={saveHandler}
+            disabled={!isSaveButtonVisible}
+          >
             Save changes
           </Button>
         </ModalFooterActions>
