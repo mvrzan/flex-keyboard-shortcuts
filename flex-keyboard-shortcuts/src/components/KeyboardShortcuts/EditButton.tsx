@@ -4,16 +4,27 @@ import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 interface EditButtonProps {
   shortcutKey: string;
   actionName: string;
-  openModalHandler: (shortcutKey: string, actionName: string) => void;
+  throttle?: number;
+
+  openModalHandler: (
+    shortcutKey: string,
+    actionName: string,
+    throttle?: number
+  ) => void;
 }
 
 const EditButton = ({
   shortcutKey,
   actionName,
+  throttle,
   openModalHandler,
 }: EditButtonProps) => {
-  const clickHandler = (shortcutKey: string, actionName: string): void => {
-    openModalHandler(shortcutKey, actionName);
+  const clickHandler = (
+    shortcutKey: string,
+    actionName: string,
+    throttle?: number
+  ): void => {
+    openModalHandler(shortcutKey, actionName, throttle);
   };
 
   return (
@@ -21,7 +32,7 @@ const EditButton = ({
       variant="primary_icon"
       size="reset"
       onClick={() => {
-        clickHandler(shortcutKey, actionName);
+        clickHandler(shortcutKey, actionName, throttle);
       }}
     >
       <EditIcon decorative={false} title="Edit" />

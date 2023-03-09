@@ -6,7 +6,7 @@ import { ModalHeading, ModalFooterActions } from '@twilio-paste/core';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
 import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
-import { Grid, Column } from '@twilio-paste/core';
+import { Grid, Column, HelpText } from '@twilio-paste/core';
 
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 import KeyCommand from './KeyCommand';
@@ -21,6 +21,8 @@ interface ModalProps {
   isEditModalOpen: boolean;
   selectedShortcutKey: string;
   selectedActionName: string;
+  selectedThrottle?: number;
+  isThrottleEnabled: boolean;
   closeModalHandler: () => void;
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterSuccessNotification: (
@@ -32,13 +34,15 @@ interface ModalProps {
 
 const ModalWindow = ({
   isEditModalOpen,
+  isThrottleEnabled,
   closeModalHandler,
   selectedShortcutKey,
   selectedActionName,
+  selectedThrottle,
   setShortcuts,
   toasterSuccessNotification,
 }: ModalProps) => {
-  const [actionName, setActionName] = useState('');
+  const [throttleValue, setThrottleValue] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
 
   const modalHeadingID = useUID();
@@ -76,14 +80,14 @@ const ModalWindow = ({
             <Box marginBottom="space50">
               <Stack orientation="vertical" spacing="space30">
                 <ModalHeading as="h6" id={modalHeadingID}>
-                  Current settings
+                  Current configuration
                 </ModalHeading>
                 <Table>
                   <THead>
                     <Tr>
                       <Th>Action name</Th>
                       <Th>Current shortcut</Th>
-                      <Th>Throttle</Th>
+                      {isThrottleEnabled && <Th>Throttle (ms)</Th>}
                     </Tr>
                   </THead>
                   <TBody>
@@ -92,7 +96,13 @@ const ModalWindow = ({
                       <Td>
                         <KeyCommand keyCommand={selectedShortcutKey} />
                       </Td>
-                      <Td>Nothing</Td>
+                      {isThrottleEnabled && (
+                        <Td>
+                          {selectedThrottle
+                            ? selectedThrottle
+                            : 'Not configured'}
+                        </Td>
+                      )}
                     </Tr>
                   </TBody>
                 </Table>
@@ -106,37 +116,34 @@ const ModalWindow = ({
             <Box marginBottom="space50">
               <Stack orientation="vertical" spacing="space30">
                 <ModalHeading as="h6" id={modalHeadingID}>
-                  New settings
+                  New configuration
                 </ModalHeading>
-                <Stack orientation="horizontal" spacing="space30">
+                <Stack orientation="horizontal" spacing="space200">
                   <Stack orientation="vertical" spacing="space30">
-                    <Label htmlFor="test">New keyboard shortcut</Label>
+                    <Label htmlFor="new-shortcut">New keyboard shortcut</Label>
                     <Input
                       onChange={e => setNewShortcut(e.currentTarget.value)}
                       id={titleInputID}
                       type="text"
                       value={newShortcut}
                       maxLength={1}
+                      placeholder="Single character"
                     />
+                    <HelpText>Enter your new keyboard shortcut</HelpText>
                   </Stack>
-                  {/* <Stack orientation="vertical" spacing="space30">
-                    <Label htmlFor="test">Action name</Label>
-                    <Input
-                      onChange={e => setActionName(e.currentTarget.value)}
-                      id={titleInputID}
-                      type="text"
-                      value={actionName}
-                    />
-                  </Stack> */}
-                  <Stack orientation="vertical" spacing="space30">
-                    <Label htmlFor="test">Throttle</Label>
-                    <Input
-                      onChange={e => setActionName(e.currentTarget.value)}
-                      id={titleInputID}
-                      type="text"
-                      value={actionName}
-                    />
-                  </Stack>
+                  {isThrottleEnabled && (
+                    <Stack orientation="vertical" spacing="space30">
+                      <Label htmlFor="throttle">Throttle</Label>
+                      <Input
+                        onChange={e => setThrottleValue(e.currentTarget.value)}
+                        id={titleInputID}
+                        type="number"
+                        value={throttleValue}
+                        placeholder="Number in milliseconds"
+                      />
+                      <HelpText>Enter the shortcut throttle</HelpText>
+                    </Stack>
+                  )}
                 </Stack>
               </Stack>
             </Box>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
@@ -6,9 +6,10 @@ import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
 interface SettingsProps {
   setShortcuts: ([]) => void;
+  setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
 }
 
-const Settings = ({ setShortcuts }: SettingsProps) => {
+const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
   const toaster = useToaster();
@@ -49,6 +50,7 @@ const Settings = ({ setShortcuts }: SettingsProps) => {
             checked={throttling}
             onChange={() => {
               setThrottling(!throttling);
+              setIsThrottleEnabled(!throttling);
               console.log('Enable key throttling');
             }}
           >

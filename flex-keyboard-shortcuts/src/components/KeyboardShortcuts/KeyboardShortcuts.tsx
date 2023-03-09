@@ -24,6 +24,10 @@ const KeyboardShortcuts = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
   const [selectedActionName, setSelectedActionName] = useState('');
+  const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
+    0
+  );
+  const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
   const randomComponentId = useUID();
   const toaster = useToaster();
 
@@ -33,17 +37,22 @@ const KeyboardShortcuts = () => {
     newShortcut: string
   ) => {
     toaster.push({
-      message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut}!
-      Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut}`,
+      message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut.toUpperCase()}!
+      Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut.toUpperCase()}`,
       variant: 'success',
       dismissAfter: 6000,
     });
   };
 
-  const openModalHandler = (shortcut: string, action: string) => {
+  const openModalHandler = (
+    shortcut: string,
+    action: string,
+    throttle?: number
+  ) => {
     setIsEditModalOpen(true);
     setSelectedShortcutKey(shortcut);
     setSelectedActionName(action);
+    setSelectedThrottle(throttle);
   };
 
   const closeModalHandler = () => {
@@ -86,9 +95,20 @@ const KeyboardShortcuts = () => {
                       <InformationIcon decorative={false} title="modifiers" />
                     </Stack>
                   </Th>
-                  <Th>Shortcuts</Th>
-                  <Th>Actions</Th>
-                  <Th>Edit</Th>
+                  <Th>
+                    <Text as="span">Shortcuts</Text>
+                  </Th>
+                  <Th>
+                    <Text as="span">Actions</Text>
+                  </Th>
+                  {isThrottleEnabled && (
+                    <Th>
+                      <Text as="span">Throttle (ms)</Text>
+                    </Th>
+                  )}
+                  <Th>
+                    <Text as="span">Edit</Text>
+                  </Th>
                 </Tr>
               </THead>
               <TBody>
@@ -103,10 +123,16 @@ const KeyboardShortcuts = () => {
                         <KeyCommand keyCommand={item.key} />{' '}
                       </Td>
                       <Td>{item.actionName}</Td>
+                      {isThrottleEnabled && (
+                        <Td>
+                          {item.throttle ? item.throttle : 'Not configured'}
+                        </Td>
+                      )}
                       <Td>
                         <EditButton
                           shortcutKey={item.key}
                           actionName={item.actionName}
+                          throttle={item.throttle}
                           openModalHandler={openModalHandler}
                         />
                       </Td>
@@ -122,7 +148,10 @@ const KeyboardShortcuts = () => {
             </Heading>
           </TabPanel>
           <TabPanel>
-            <Settings setShortcuts={setShortcuts} />
+            <Settings
+              setShortcuts={setShortcuts}
+              setIsThrottleEnabled={setIsThrottleEnabled}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -132,8 +161,10 @@ const KeyboardShortcuts = () => {
           closeModalHandler={closeModalHandler}
           selectedShortcutKey={selectedShortcutKey}
           selectedActionName={selectedActionName}
+          selectedThrottle={selectedThrottle}
           setShortcuts={setShortcuts}
           toasterSuccessNotification={toasterSuccessNotification}
+          isThrottleEnabled={isThrottleEnabled}
         />
       )}
     </Box>
