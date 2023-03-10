@@ -50,23 +50,24 @@ const ModalWindow = ({
   const modalHeadingID = useUID();
   const titleInputID = useUID();
 
-  const lowerCamelCase: any = selectedActionName
-    .toLowerCase()
-    .split(' ')
-    .map((word, index) => {
-      if (index === 0) {
-        return word;
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join('');
-
   const saveHandler = () => {
+    const lowerCamelCase = selectedActionName
+      .toLowerCase()
+      .split(' ')
+      .map((word, index) => {
+        if (index === 0) {
+          return word;
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join('');
+
     Flex.KeyboardShortcutManager.remapShortcut(
       selectedShortcutKey,
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
       {
-        action: Flex.defaultActions.toggleActivityMenu,
+        action:
+          Flex.defaultActions[lowerCamelCase as keyof typeof defaultActions],
         name: selectedActionName,
         throttle: +throttleValue,
       }
