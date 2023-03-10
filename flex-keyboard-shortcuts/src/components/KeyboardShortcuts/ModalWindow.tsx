@@ -10,6 +10,7 @@ import { Grid, Column, HelpText } from '@twilio-paste/core';
 
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 import KeyCommand from './KeyCommand';
+import { defaultActions } from '@twilio/flex-ui';
 
 interface ShortcutsObject {
   key: string;
@@ -49,8 +50,16 @@ const ModalWindow = ({
   const modalHeadingID = useUID();
   const titleInputID = useUID();
 
-  // console.log('selectedActionName', selectedActionName);
-  // console.log('newShortcut', typeof newShortcut);
+  const lowerCamelCase: any = selectedActionName
+    .toLowerCase()
+    .split(' ')
+    .map((word, index) => {
+      if (index === 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join('');
 
   const saveHandler = () => {
     Flex.KeyboardShortcutManager.remapShortcut(
@@ -58,7 +67,7 @@ const ModalWindow = ({
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
       {
         action: Flex.defaultActions.toggleActivityMenu,
-        name: 'Toggle Activity Menu',
+        name: selectedActionName,
         throttle: +throttleValue,
       }
     );
@@ -72,8 +81,6 @@ const ModalWindow = ({
   };
 
   useEffect(() => {
-    console.log('throttleValue', throttleValue);
-    console.log('throttleValue', !isNaN(+throttleValue));
     if (newShortcut === '') {
       setIsSaveButtonVisible(false);
     }
