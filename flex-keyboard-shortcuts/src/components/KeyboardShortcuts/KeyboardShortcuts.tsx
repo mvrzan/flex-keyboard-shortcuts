@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
 
-import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
+import {
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Paragraph,
+} from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
-import { Box, Tooltip, Text, Heading, Stack } from '@twilio-paste/core';
+import { Box, Tooltip, Text, Heading, Stack, Card } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
+import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 
 import KeyCommand from './KeyCommand';
 import EditButton from './EditButton';
@@ -21,6 +29,7 @@ interface ShortcutsObject {
 
 const KeyboardShortcuts = () => {
   const [shortcuts, setShortcuts] = useState<ShortcutsObject[]>([]);
+  const [noShortcuts, setNoShortcuts] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
   const [selectedActionName, setSelectedActionName] = useState('');
@@ -60,7 +69,12 @@ const KeyboardShortcuts = () => {
   };
 
   useEffect(() => {
-    setShortcuts(getShortcuts());
+    const initialShortcuts = getShortcuts();
+    if (initialShortcuts.length === 0) {
+      setNoShortcuts(true);
+      setShortcuts([]);
+    }
+    setShortcuts(initialShortcuts);
   }, []);
 
   return (
@@ -84,63 +98,81 @@ const KeyboardShortcuts = () => {
             <Heading as="h3" variant="heading30">
               Default keyboard shortcuts
             </Heading>
-            <Table>
-              <THead>
-                <Tr>
-                  <Th>
-                    <Stack orientation="horizontal" spacing="space30">
-                      <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
-                        <Text as="span">Modifiers</Text>
-                      </Tooltip>
-                      <InformationIcon decorative={false} title="modifiers" />
-                    </Stack>
-                  </Th>
-                  <Th>
-                    <Text as="span">Shortcuts</Text>
-                  </Th>
-                  <Th>
-                    <Text as="span">Actions</Text>
-                  </Th>
-                  {isThrottleEnabled && (
+            {noShortcuts ? (
+              <Card>
+                <Heading as="h5" variant="heading50">
+                  <Stack orientation="horizontal" spacing="space20">
+                    <WarningIcon
+                      decorative={false}
+                      title="Description of icon"
+                    />
+                    Re-enable Keyboard Shortcuts
+                  </Stack>
+                </Heading>
+                <Paragraph>
+                  There are no configured keyboard shortcuts. Please reset your
+                  keyboard settings to enable keyboard shortcut customization.
+                </Paragraph>
+              </Card>
+            ) : (
+              <Table>
+                <THead>
+                  <Tr>
                     <Th>
-                      <Text as="span">Throttle (ms)</Text>
+                      <Stack orientation="horizontal" spacing="space30">
+                        <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
+                          <Text as="span">Modifiers</Text>
+                        </Tooltip>
+                        <InformationIcon decorative={false} title="modifiers" />
+                      </Stack>
                     </Th>
-                  )}
-                  <Th>
-                    <Text as="span">Edit</Text>
-                  </Th>
-                </Tr>
-              </THead>
-              <TBody>
-                {shortcuts.map(item => {
-                  return (
-                    <Tr key={item.key}>
-                      <Td>
-                        <KeyCommand keyCommand="Ctrl" /> +{' '}
-                        <KeyCommand keyCommand="Shift" />
-                      </Td>
-                      <Td>
-                        <KeyCommand keyCommand={item.key} />{' '}
-                      </Td>
-                      <Td>{item.actionName}</Td>
-                      {isThrottleEnabled && (
+                    <Th>
+                      <Text as="span">Shortcuts</Text>
+                    </Th>
+                    <Th>
+                      <Text as="span">Actions</Text>
+                    </Th>
+                    {isThrottleEnabled && (
+                      <Th>
+                        <Text as="span">Throttle (ms)</Text>
+                      </Th>
+                    )}
+                    <Th>
+                      <Text as="span">Edit</Text>
+                    </Th>
+                  </Tr>
+                </THead>
+                <TBody>
+                  {shortcuts.map(item => {
+                    return (
+                      <Tr key={item.key}>
                         <Td>
-                          {item.throttle ? item.throttle : 'Not configured'}
+                          <KeyCommand keyCommand="Ctrl" /> +{' '}
+                          <KeyCommand keyCommand="Shift" />
                         </Td>
-                      )}
-                      <Td>
-                        <EditButton
-                          shortcutKey={item.key}
-                          actionName={item.actionName}
-                          throttle={item.throttle}
-                          openModalHandler={openModalHandler}
-                        />
-                      </Td>
-                    </Tr>
-                  );
-                })}
-              </TBody>
-            </Table>
+                        <Td>
+                          <KeyCommand keyCommand={item.key} />{' '}
+                        </Td>
+                        <Td>{item.actionName}</Td>
+                        {isThrottleEnabled && (
+                          <Td>
+                            {item.throttle ? item.throttle : 'Not configured'}
+                          </Td>
+                        )}
+                        <Td>
+                          <EditButton
+                            shortcutKey={item.key}
+                            actionName={item.actionName}
+                            throttle={item.throttle}
+                            openModalHandler={openModalHandler}
+                          />
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </TBody>
+              </Table>
+            )}
           </TabPanel>
           <TabPanel>
             <Heading as="h3" variant="heading30">
@@ -150,6 +182,7 @@ const KeyboardShortcuts = () => {
           <TabPanel>
             <Settings
               setShortcuts={setShortcuts}
+              setNoShortcuts={setNoShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}
             />
           </TabPanel>

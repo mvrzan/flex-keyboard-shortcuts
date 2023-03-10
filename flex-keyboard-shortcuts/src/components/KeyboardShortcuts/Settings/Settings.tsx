@@ -4,12 +4,24 @@ import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
-interface SettingsProps {
-  setShortcuts: ([]) => void;
-  setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
+interface ShortcutsObject {
+  key: string;
+  actionName: string;
+  throttle?: number;
 }
 
-const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
+interface SettingsProps {
+  // setShortcuts: ({}) => void;
+  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
+  setNoShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Settings = ({
+  setShortcuts,
+  setIsThrottleEnabled,
+  setNoShortcuts,
+}: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
   const toaster = useToaster();
@@ -30,6 +42,7 @@ const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
   const clickHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
     setShortcuts([]);
+    setNoShortcuts(true);
     toasterShortcutsDisabledNotification();
   };
 
@@ -104,7 +117,7 @@ const Settings = ({ setShortcuts, setIsThrottleEnabled }: SettingsProps) => {
           <Button
             variant="destructive"
             onClick={() => {
-              console.log(' Reset keyboard shortcuts');
+              console.log('Reset keyboard shortcuts');
             }}
           >
             Reset keyboard shortcuts
