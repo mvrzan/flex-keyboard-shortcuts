@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import * as Flex from '@twilio/flex-ui';
-import { Button, Heading, Stack } from '@twilio-paste/core';
+import { Button, Heading, Stack, Text } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
@@ -11,7 +11,6 @@ interface ShortcutsObject {
 }
 
 interface SettingsProps {
-  // setShortcuts: ({}) => void;
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
   setNoShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +23,8 @@ const Settings = ({
 }: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
+  const [disableShortcuts, setDisabledShortcuts] = useState(false);
+  const [resetShortcuts, setResetShortcuts] = useState(false);
   const toaster = useToaster();
 
   const toasterShortcutsDisabledNotification = () => {
@@ -43,6 +44,7 @@ const Settings = ({
     Flex.KeyboardShortcutManager.disableShortcuts();
     setShortcuts([]);
     setNoShortcuts(true);
+    setDisabledShortcuts(false);
     toasterShortcutsDisabledNotification();
   };
 
@@ -100,9 +102,26 @@ const Settings = ({
             cannot be reversed and you will have to reconfigure all of your
             keyboard shortcuts.
           </Paragraph>
-          <Button variant="destructive" onClick={clickHandler}>
-            Disable all shortcuts
-          </Button>
+          {disableShortcuts ? (
+            <Stack orientation="horizontal" spacing="space30">
+              <Button
+                variant="secondary"
+                onClick={() => setDisabledShortcuts(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={clickHandler}>
+                Save
+              </Button>
+            </Stack>
+          ) : (
+            <Button
+              variant="destructive"
+              onClick={() => setDisabledShortcuts(true)}
+            >
+              Disable all shortcuts
+            </Button>
+          )}
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
