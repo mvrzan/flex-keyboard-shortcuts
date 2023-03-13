@@ -200,6 +200,7 @@ const KeyboardShortcuts = () => {
       </Tabs>
       {isEditModalOpen && (
         <ModalWindow
+          shortcuts={shortcuts}
           isEditModalOpen={isEditModalOpen}
           closeModalHandler={closeModalHandler}
           selectedShortcutKey={selectedShortcutKey}

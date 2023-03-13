@@ -19,6 +19,7 @@ interface ShortcutsObject {
 }
 
 interface ModalProps {
+  shortcuts: ShortcutsObject[];
   isEditModalOpen: boolean;
   selectedShortcutKey: string;
   selectedActionName: string;
@@ -36,6 +37,7 @@ interface ModalProps {
 }
 
 const ModalWindow = ({
+  shortcuts,
   isEditModalOpen,
   isThrottleEnabled,
   canDeleteShortcuts,
@@ -50,6 +52,7 @@ const ModalWindow = ({
   const [throttleValue, setThrottleValue] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(true);
+  const [shortcutErrorMessage, setShortcutErrorMessage] = useState('');
 
   const modalHeadingID = useUID();
   const titleInputID = useUID();
@@ -66,6 +69,18 @@ const ModalWindow = ({
       })
       .join('');
 
+    const shortcutKeys = shortcuts.map(item => item.key);
+    const checkShortcut =
+      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
+    const indexPosition = shortcutKeys.indexOf(checkShortcut);
+
+    if (shortcutKeys.indexOf(checkShortcut) !== -1) {
+      setShortcutErrorMessage(
+        `A shortcut with key mapping ${checkShortcut} already exists and it is assigned to the ${shortcuts[indexPosition].actionName} action.`
+      );
+      return;
+    }
+
     Flex.KeyboardShortcutManager.remapShortcut(
       selectedShortcutKey,
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
@@ -76,6 +91,7 @@ const ModalWindow = ({
         throttle: +throttleValue,
       }
     );
+
     closeModalHandler();
     setShortcuts(getShortcuts());
     toasterSuccessNotification(
@@ -190,6 +206,11 @@ const ModalWindow = ({
                       />
                       <HelpText>Enter the shortcut throttle</HelpText>
                     </Stack>
+                  )}
+                  {shortcutErrorMessage !== '' ? (
+                    <HelpText variant="error">{shortcutErrorMessage}</HelpText>
+                  ) : (
+                    ''
                   )}
                 </Stack>
               </Stack>
