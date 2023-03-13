@@ -95,8 +95,8 @@ const Settings = ({
             Disable all shortcuts
           </Heading>
           <Paragraph>
-            Disable all keyboard shortcuts, including the custom ones. Your
-            shortcuts will no longer. Please keep in mind that this action
+            Disable all keyboard shortcuts, including the custom ones; your
+            shortcuts will no longer work. Please keep in mind that this action
             cannot be reversed and you will have to reconfigure all of your
             keyboard shortcuts.
           </Paragraph>
