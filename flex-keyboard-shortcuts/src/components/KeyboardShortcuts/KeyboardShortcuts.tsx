@@ -20,6 +20,7 @@ import EditButton from './EditButton';
 import ModalWindow from './ModalWindow';
 import Settings from './Settings/Settings';
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
+import DeleteButton from './DeleteButton';
 
 interface ShortcutsObject {
   key: string;
@@ -169,12 +170,24 @@ const KeyboardShortcuts = () => {
                           </Td>
                         )}
                         <Td>
-                          <EditButton
-                            shortcutKey={item.key}
-                            actionName={item.actionName}
-                            throttle={item.throttle}
-                            openModalHandler={openModalHandler}
-                          />
+                          <Stack orientation="horizontal" spacing="space30">
+                            <EditButton
+                              shortcutKey={item.key}
+                              actionName={item.actionName}
+                              throttle={item.throttle}
+                              openModalHandler={openModalHandler}
+                            />
+                            {canDeleteShortcuts && (
+                              <DeleteButton
+                                shortcutKey={item.key}
+                                actionName={item.actionName}
+                                setShortcuts={setShortcuts}
+                                toasterDeleteNotification={
+                                  toasterDeleteNotification
+                                }
+                              />
+                            )}
+                          </Stack>
                         </Td>
                       </Tr>
                     );
@@ -209,8 +222,6 @@ const KeyboardShortcuts = () => {
           setShortcuts={setShortcuts}
           toasterSuccessNotification={toasterSuccessNotification}
           isThrottleEnabled={isThrottleEnabled}
-          canDeleteShortcuts={canDeleteShortcuts}
-          toasterDeleteNotification={toasterDeleteNotification}
         />
       )}
     </Box>
