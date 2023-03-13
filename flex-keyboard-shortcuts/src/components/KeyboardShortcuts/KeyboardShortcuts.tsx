@@ -31,6 +31,7 @@ const KeyboardShortcuts = () => {
   const [shortcuts, setShortcuts] = useState<ShortcutsObject[]>([]);
   const [noShortcuts, setNoShortcuts] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [canDeleteShortcuts, setCanDeleteShortcuts] = useState(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
   const [selectedActionName, setSelectedActionName] = useState('');
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
@@ -50,6 +51,14 @@ const KeyboardShortcuts = () => {
       Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut.toUpperCase()}`,
       variant: 'success',
       dismissAfter: 6000,
+    });
+  };
+
+  const toasterDeleteNotification = (actionName: string) => {
+    toaster.push({
+      message: `Keyboard shortcut named ${actionName} has been successfully deleted.`,
+      variant: 'warning',
+      dismissAfter: 4000,
     });
   };
 
@@ -184,6 +193,7 @@ const KeyboardShortcuts = () => {
               setShortcuts={setShortcuts}
               setNoShortcuts={setNoShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}
+              setCanDeleteShortcuts={setCanDeleteShortcuts}
             />
           </TabPanel>
         </TabPanels>
@@ -198,6 +208,8 @@ const KeyboardShortcuts = () => {
           setShortcuts={setShortcuts}
           toasterSuccessNotification={toasterSuccessNotification}
           isThrottleEnabled={isThrottleEnabled}
+          canDeleteShortcuts={canDeleteShortcuts}
+          toasterDeleteNotification={toasterDeleteNotification}
         />
       )}
     </Box>

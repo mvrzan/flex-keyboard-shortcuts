@@ -14,12 +14,14 @@ interface SettingsProps {
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
   setNoShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
+  setCanDeleteShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Settings = ({
   setShortcuts,
   setIsThrottleEnabled,
   setNoShortcuts,
+  setCanDeleteShortcuts,
 }: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
@@ -38,6 +40,11 @@ const Settings = ({
   const throttlingHandler = () => {
     setThrottling(!throttling);
     setIsThrottleEnabled(!throttling);
+  };
+
+  const deleteShortcutsHandler = () => {
+    setCanDeleteShortcuts(!deleteShortcut);
+    setDeleteShortcut(!deleteShortcut);
   };
 
   const clickHandler = () => {
@@ -84,10 +91,7 @@ const Settings = ({
           <Switch
             value="delete"
             checked={deleteShortcut}
-            onChange={() => {
-              setDeleteShortcut(!deleteShortcut);
-              console.log('Delete individual shortcuts');
-            }}
+            onChange={deleteShortcutsHandler}
           >
             Delete individual shortcuts
           </Switch>

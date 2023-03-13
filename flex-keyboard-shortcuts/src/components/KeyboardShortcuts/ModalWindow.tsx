@@ -24,6 +24,7 @@ interface ModalProps {
   selectedActionName: string;
   selectedThrottle?: number;
   isThrottleEnabled: boolean;
+  canDeleteShortcuts: boolean;
   closeModalHandler: () => void;
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterSuccessNotification: (
@@ -31,17 +32,20 @@ interface ModalProps {
     oldShortcut: string,
     newShortcut: string
   ) => void;
+  toasterDeleteNotification: (actionName: string) => void;
 }
 
 const ModalWindow = ({
   isEditModalOpen,
   isThrottleEnabled,
+  canDeleteShortcuts,
   closeModalHandler,
   selectedShortcutKey,
   selectedActionName,
   selectedThrottle,
   setShortcuts,
   toasterSuccessNotification,
+  toasterDeleteNotification,
 }: ModalProps) => {
   const [throttleValue, setThrottleValue] = useState('');
   const [newShortcut, setNewShortcut] = useState('');
@@ -79,6 +83,13 @@ const ModalWindow = ({
       selectedShortcutKey,
       newShortcut
     );
+  };
+
+  const deleteShortcutHandler = () => {
+    Flex.KeyboardShortcutManager.deleteShortcuts([selectedShortcutKey]);
+    setShortcuts(getShortcuts());
+    closeModalHandler();
+    toasterDeleteNotification(selectedActionName);
   };
 
   useEffect(() => {
@@ -188,6 +199,11 @@ const ModalWindow = ({
       </ModalBody>
       <ModalFooter>
         <ModalFooterActions>
+          {canDeleteShortcuts && (
+            <Button variant="destructive" onClick={deleteShortcutHandler}>
+              Delete
+            </Button>
+          )}
           <Button variant="secondary" onClick={closeModalHandler}>
             Cancel
           </Button>
