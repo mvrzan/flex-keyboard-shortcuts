@@ -11,12 +11,7 @@ import { Grid, Column, HelpText } from '@twilio-paste/core';
 import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 import KeyCommand from './KeyCommand';
 import { defaultActions } from '@twilio/flex-ui';
-
-interface ShortcutsObject {
-  key: string;
-  actionName: string;
-  throttle?: number;
-}
+import { ShortcutsObject } from '../../types/types';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
@@ -26,7 +21,7 @@ interface ModalProps {
   selectedThrottle?: number;
   isThrottleEnabled: boolean;
   closeModalHandler: () => void;
-  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  setDefaultShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterSuccessNotification: (
     actionName: string,
     oldShortcut: string,
@@ -42,7 +37,7 @@ const ModalWindow = ({
   selectedShortcutKey,
   selectedActionName,
   selectedThrottle,
-  setShortcuts,
+  setDefaultShortcuts,
   toasterSuccessNotification,
 }: ModalProps) => {
   const [throttleValue, setThrottleValue] = useState('');
@@ -89,7 +84,10 @@ const ModalWindow = ({
     );
 
     closeModalHandler();
-    setShortcuts(getShortcuts());
+
+    shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].key = newShortcut;
+
+    setDefaultShortcuts(shortcuts);
     toasterSuccessNotification(
       selectedActionName,
       selectedShortcutKey,

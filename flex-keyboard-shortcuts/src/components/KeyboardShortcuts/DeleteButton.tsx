@@ -3,31 +3,30 @@ import { Dispatch, SetStateAction } from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
-import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
-
-interface ShortcutsObject {
-  key: string;
-  actionName: string;
-  throttle?: number;
-}
+import { ShortcutsObject } from '../../types/types';
 
 interface DeleteButtonProps {
   shortcutKey: string;
   actionName: string;
-  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  shortcuts: ShortcutsObject[];
+  setDefaultShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterDeleteNotification: (actionName: string) => void;
 }
 
 const DeleteButton = ({
   shortcutKey,
   actionName,
-  setShortcuts,
+  shortcuts,
+  setDefaultShortcuts,
   toasterDeleteNotification,
 }: DeleteButtonProps) => {
   const deleteShortcutHandler = () => {
-    console.log(`I am deleting ${shortcutKey}, ${actionName}`);
+    const updatedDefaultShortcuts = shortcuts.filter(
+      shortcut => shortcut.key !== shortcutKey
+    );
+    setDefaultShortcuts(updatedDefaultShortcuts);
+
     Flex.KeyboardShortcutManager.deleteShortcuts([shortcutKey]);
-    setShortcuts(getShortcuts());
     toasterDeleteNotification(actionName);
   };
 

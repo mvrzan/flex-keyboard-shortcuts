@@ -1,20 +1,16 @@
-import { useState, Dispatch, SetStateAction } from 'react';
 import * as Flex from '@twilio/flex-ui';
-import { Button, Heading, Stack, Text } from '@twilio-paste/core';
+import { useState, Dispatch, SetStateAction } from 'react';
+
+import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
-
-interface ShortcutsObject {
-  key: string;
-  actionName: string;
-  throttle?: number;
-}
+import { ShortcutsObject } from '../../../types/types';
 
 interface SettingsProps {
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
-  setNoShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
-  setCanDeleteShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
+  setNoShortcuts: Dispatch<React.SetStateAction<boolean>>;
+  setCanDeleteShortcuts: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Settings = ({
