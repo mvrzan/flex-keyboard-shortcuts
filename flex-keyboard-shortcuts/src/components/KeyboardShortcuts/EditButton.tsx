@@ -1,14 +1,10 @@
 import { Button } from '@twilio-paste/core';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 
-import { Dispatch, SetStateAction } from 'react';
-import { ShortcutsObject } from '../../types/types';
-
 interface EditButtonProps {
   shortcutKey: string;
   actionName: string;
   throttle?: number;
-  setCustomShortcuts?: Dispatch<SetStateAction<ShortcutsObject[]>>;
   openModalHandler: (
     shortcutKey: string,
     actionName: string,
@@ -21,13 +17,11 @@ const EditButton = ({
   actionName,
   throttle,
   openModalHandler,
-  setCustomShortcuts,
 }: EditButtonProps) => {
   const clickHandler = (
     shortcutKey: string,
     actionName: string,
-    throttle?: number,
-    setCustomShortcuts?: Dispatch<SetStateAction<ShortcutsObject[]>>
+    throttle?: number
   ): void => {
     openModalHandler(shortcutKey, actionName, throttle);
   };
