@@ -6,7 +6,7 @@ import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { Box, Heading } from '@twilio-paste/core';
 
 import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
-import DefaultKeyboardShortcuts from './Tabs/DefaultKeyboardShortcuts';
+import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
 import Settings from './Settings/Settings';
 
 const KeyboardShortcuts = () => {
@@ -58,7 +58,7 @@ const KeyboardShortcuts = () => {
             <Heading as="h3" variant="heading30">
               Default keyboard shortcuts
             </Heading>
-            <DefaultKeyboardShortcuts
+            <DefaultKeyboardShortcutsView
               noShortcuts={noShortcuts}
               isThrottleEnabled={isThrottleEnabled}
               canDeleteShortcuts={canDeleteShortcuts}

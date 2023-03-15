@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import { Paragraph } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
 import { Box, Tooltip, Text, Heading, Stack, Card } from '@twilio-paste/core';
@@ -24,7 +24,7 @@ interface DefaultKeyboardShortcutsViewProps {
   ) => void;
 }
 
-const DefaultKeyboardShortcuts = ({
+const DefaultKeyboardShortcutsView = ({
   noShortcuts,
   isThrottleEnabled,
   canDeleteShortcuts,
@@ -165,4 +165,4 @@ const DefaultKeyboardShortcuts = ({
   );
 };
 
-export default DefaultKeyboardShortcuts;
+export default DefaultKeyboardShortcutsView;

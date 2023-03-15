@@ -90,13 +90,13 @@ const Settings = ({
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
-            Disable all shortcuts
+            Remove all shortcuts
           </Heading>
           <Paragraph>
-            Disable all keyboard shortcuts, including the custom ones; your
+            Remove all keyboard shortcuts, including the custom ones; your
             shortcuts will no longer work. Please keep in mind that this action
             cannot be reversed and you will have to reconfigure all of your
-            keyboard shortcuts.
+            keyboard shortcuts. This is an irreversible action
           </Paragraph>
           {disableShortcuts ? (
             <Stack orientation="horizontal" spacing="space30">
@@ -115,7 +115,7 @@ const Settings = ({
               variant="destructive"
               onClick={() => setDisabledShortcuts(true)}
             >
-              Disable all shortcuts
+              Remove all shortcuts
             </Button>
           )}
         </Card>
@@ -126,8 +126,7 @@ const Settings = ({
           <Paragraph>
             Reset all of your keyboard shortcuts to the default values. This
             option will delete all of the custom shortcut mappings and revert
-            the default keyboard shortcuts to its original values. This is an
-            irreversible action.
+            them to their original values. This is an irreversible action.
           </Paragraph>
           <Button
             variant="destructive"
