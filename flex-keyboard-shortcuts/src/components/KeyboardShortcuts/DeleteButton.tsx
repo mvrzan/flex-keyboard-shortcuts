@@ -9,7 +9,7 @@ interface DeleteButtonProps {
   shortcutKey: string;
   actionName: string;
   shortcuts: ShortcutsObject[];
-  setDefaultShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterDeleteNotification: (actionName: string) => void;
 }
 
@@ -17,14 +17,14 @@ const DeleteButton = ({
   shortcutKey,
   actionName,
   shortcuts,
-  setDefaultShortcuts,
+  setShortcuts,
   toasterDeleteNotification,
 }: DeleteButtonProps) => {
   const deleteShortcutHandler = () => {
     const updatedDefaultShortcuts = shortcuts.filter(
       shortcut => shortcut.key !== shortcutKey
     );
-    setDefaultShortcuts(updatedDefaultShortcuts);
+    setShortcuts(updatedDefaultShortcuts);
 
     Flex.KeyboardShortcutManager.deleteShortcuts([shortcutKey]);
     toasterDeleteNotification(actionName);

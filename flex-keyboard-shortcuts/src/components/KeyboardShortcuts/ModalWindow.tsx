@@ -8,7 +8,6 @@ import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
 import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
 import { Grid, Column, HelpText } from '@twilio-paste/core';
 
-import { getShortcuts } from '../../utils/keyboardShortcutsUtil';
 import KeyCommand from './KeyCommand';
 import { defaultActions } from '@twilio/flex-ui';
 import { ShortcutsObject } from '../../types/types';
@@ -21,7 +20,7 @@ interface ModalProps {
   selectedThrottle?: number;
   isThrottleEnabled: boolean;
   closeModalHandler: () => void;
-  setDefaultShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
+  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterSuccessNotification: (
     actionName: string,
     oldShortcut: string,
@@ -37,7 +36,7 @@ const ModalWindow = ({
   selectedShortcutKey,
   selectedActionName,
   selectedThrottle,
-  setDefaultShortcuts,
+  setShortcuts,
   toasterSuccessNotification,
 }: ModalProps) => {
   const [throttleValue, setThrottleValue] = useState('');
@@ -49,7 +48,7 @@ const ModalWindow = ({
   const titleInputID = useUID();
 
   const saveHandler = () => {
-    const lowerCamelCase = selectedActionName
+    const camelCase = selectedActionName
       .toLowerCase()
       .split(' ')
       .map((word, index) => {
@@ -76,8 +75,7 @@ const ModalWindow = ({
       selectedShortcutKey,
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
       {
-        action:
-          Flex.defaultActions[lowerCamelCase as keyof typeof defaultActions],
+        action: Flex.defaultActions[camelCase as keyof typeof defaultActions],
         name: selectedActionName,
         throttle: +throttleValue,
       }
@@ -86,8 +84,11 @@ const ModalWindow = ({
     closeModalHandler();
 
     shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].key = newShortcut;
+    shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].throttle =
+      +throttleValue;
 
-    setDefaultShortcuts(shortcuts);
+    setShortcuts(shortcuts);
+
     toasterSuccessNotification(
       selectedActionName,
       selectedShortcutKey,

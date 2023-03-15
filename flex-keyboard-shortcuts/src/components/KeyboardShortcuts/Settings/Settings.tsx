@@ -4,17 +4,14 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { ShortcutsObject } from '../../../types/types';
 
 interface SettingsProps {
-  setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
   setNoShortcuts: Dispatch<React.SetStateAction<boolean>>;
   setCanDeleteShortcuts: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Settings = ({
-  setShortcuts,
   setIsThrottleEnabled,
   setNoShortcuts,
   setCanDeleteShortcuts,
@@ -45,7 +42,6 @@ const Settings = ({
 
   const clickHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
-    setShortcuts([]);
     setNoShortcuts(true);
     setDisabledShortcuts(false);
     toasterShortcutsDisabledNotification();

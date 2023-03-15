@@ -2,7 +2,6 @@ import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { FlexPlugin } from '@twilio/flex-plugin';
 import { CustomizationProvider } from '@twilio-paste/core/customization';
-import { reducers, namespace } from './states';
 
 import SideNavigationIcon from './components/SideNavigation/SideNavigationIcon';
 import KeyboardShortcuts from './components/KeyboardShortcuts/KeyboardShortcuts';
@@ -16,8 +15,6 @@ export default class KeyboardShortcutsPlugin extends FlexPlugin {
   }
 
   async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {
-    manager.store.addReducer(namespace, reducers);
-
     flex.setProviders({
       PasteThemeProvider: CustomizationProvider,
     });
