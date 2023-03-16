@@ -1,9 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
 
 interface SettingsProps {
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
@@ -22,30 +23,83 @@ const Settings = ({
   const [resetShortcuts, setResetShortcuts] = useState(false);
   const toaster = useToaster();
 
+  const localDeleteSetting = localStorage.getItem('deleteShortcuts');
+  const localThrottlingSetting = localStorage.getItem('enableThrottling');
+  const localRemoveAllSetting = localStorage.getItem('removeAllShortcuts');
+
   const toasterShortcutsDisabledNotification = () => {
     toaster.push({
       message: `All keyboard shortcuts have been disabled.`,
       variant: 'error',
-      dismissAfter: 3000,
+      dismissAfter: 4000,
+    });
+  };
+
+  const toasterResetNotification = () => {
+    toaster.push({
+      message: `All keyboard shortcuts have been reset to the default values!`,
+      variant: 'warning',
+      dismissAfter: 4000,
     });
   };
 
   const throttlingHandler = () => {
     setThrottling(!throttling);
     setIsThrottleEnabled(!throttling);
+    localStorage.setItem(
+      'enableThrottling',
+      localStorage.getItem('enableThrottling') === 'true' ? 'false' : 'true'
+    );
   };
 
   const deleteShortcutsHandler = () => {
     setCanDeleteShortcuts(!deleteShortcut);
     setDeleteShortcut(!deleteShortcut);
+    localStorage.setItem(
+      'deleteShortcuts',
+      localStorage.getItem('deleteShortcuts') === 'true' ? 'false' : 'true'
+    );
   };
 
-  const clickHandler = () => {
+  const removeAllShortcutsHandler = () => {
     Flex.KeyboardShortcutManager.disableShortcuts();
     setNoShortcuts(true);
     setDisabledShortcuts(false);
     toasterShortcutsDisabledNotification();
+    localStorage.setItem(
+      'removeAllShortcuts',
+      localStorage.getItem('removeAllShortcuts') === 'true' ? 'false' : 'true'
+    );
   };
+
+  const resetShortcutsHandler = () => {
+    localStorage.removeItem('deleteShortcuts');
+    setDeleteShortcut(false);
+    localStorage.removeItem('enableThrottling');
+    setThrottling(false);
+    localStorage.removeItem('removeAllShortcuts');
+    toasterResetNotification();
+    setNoShortcuts(false);
+    setResetShortcuts(false);
+
+    resetKeyboardShortcutsUtil();
+  };
+
+  useEffect(() => {
+    if (localDeleteSetting === 'true') {
+      setDeleteShortcut(true);
+      setCanDeleteShortcuts(true);
+    }
+    if (localThrottlingSetting === 'true') {
+      setThrottling(true);
+      setIsThrottleEnabled(true);
+    }
+    if (localRemoveAllSetting === 'true') {
+      setDisabledShortcuts(false);
+      setNoShortcuts(true);
+      Flex.KeyboardShortcutManager.disableShortcuts();
+    }
+  }, []);
 
   return (
     <>
@@ -106,7 +160,7 @@ const Settings = ({
               >
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={clickHandler}>
+              <Button variant="destructive" onClick={removeAllShortcutsHandler}>
                 Save
               </Button>
             </Stack>
@@ -128,14 +182,28 @@ const Settings = ({
             option will delete all of the custom shortcut mappings and revert
             them to their original values. This is an irreversible action.
           </Paragraph>
-          <Button
-            variant="destructive"
-            onClick={() => {
-              console.log('Reset keyboard shortcuts');
-            }}
-          >
-            Reset keyboard shortcuts
-          </Button>
+          {resetShortcuts ? (
+            <Stack orientation="horizontal" spacing="space30">
+              <Button
+                variant="secondary"
+                onClick={() => setResetShortcuts(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={resetShortcutsHandler}>
+                Save
+              </Button>
+            </Stack>
+          ) : (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                setResetShortcuts(true);
+              }}
+            >
+              Reset keyboard shortcuts
+            </Button>
+          )}
         </Card>
       </Stack>
     </>

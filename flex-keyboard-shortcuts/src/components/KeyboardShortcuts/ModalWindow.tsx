@@ -208,7 +208,14 @@ const ModalWindow = ({
       </ModalBody>
       <ModalFooter>
         <ModalFooterActions>
-          <Button variant="secondary" onClick={closeModalHandler}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setNewShortcut('');
+              closeModalHandler();
+              setThrottleValue('');
+            }}
+          >
             Cancel
           </Button>
           <Button

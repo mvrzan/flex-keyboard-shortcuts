@@ -10,7 +10,7 @@ import EditButton from '../EditButton';
 import DeleteButton from '../DeleteButton';
 import ModalWindow from '../ModalWindow';
 import { ShortcutsObject } from '../../../types/types';
-import { getDefaultShortcuts } from '../../../utils/DefaultKeyboardShortcutsUtil';
+import { getDefaultShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 
 interface DefaultKeyboardShortcutsViewProps {
   noShortcuts: boolean;

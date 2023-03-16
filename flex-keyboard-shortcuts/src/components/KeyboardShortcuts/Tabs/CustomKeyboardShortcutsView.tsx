@@ -11,7 +11,7 @@ import KeyCommand from '../KeyCommand';
 import ModalWindow from '../ModalWindow';
 import DeleteButton from '../DeleteButton';
 import { ShortcutsObject } from '../../../types/types';
-import { getCustomShortcuts } from '../../../utils/keyboardShortcutsUtil';
+import { getCustomShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 
 interface CustomKeyboardShortcutsViewProps {
   noShortcuts: boolean;
