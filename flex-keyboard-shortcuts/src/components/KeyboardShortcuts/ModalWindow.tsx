@@ -81,13 +81,20 @@ const ModalWindow = ({
       }
     );
 
+    setNewShortcut('');
     closeModalHandler();
+    setThrottleValue('');
 
     shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].key = newShortcut;
     shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].throttle =
       +throttleValue;
 
     setShortcuts(shortcuts);
+
+    localStorage.setItem(
+      'shortcutsConfig',
+      JSON.stringify(Flex.KeyboardShortcutManager.keyboardShortcuts)
+    );
 
     toasterSuccessNotification(
       selectedActionName,

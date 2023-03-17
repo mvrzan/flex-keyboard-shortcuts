@@ -118,3 +118,18 @@ export const resetKeyboardShortcutsUtil = () => {
   Flex.KeyboardShortcutManager.init(Flex.defaultKeyboardShortcuts);
   getCustomShortcuts();
 };
+
+export const getShortcutsActions = (): ShortcutsObject[] => {
+  const shortcutValues = Object.entries(
+    Flex.KeyboardShortcutManager.keyboardShortcuts
+  ).map(item => {
+    return {
+      key: item[0],
+      actionName: item[1].name,
+      throttle: item[1]?.throttle,
+      action: item[1].action.toString(),
+    };
+  });
+
+  return shortcutValues;
+};
