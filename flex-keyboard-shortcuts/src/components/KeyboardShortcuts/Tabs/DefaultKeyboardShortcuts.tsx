@@ -10,7 +10,10 @@ import EditButton from '../EditButton';
 import DeleteButton from '../DeleteButton';
 import ModalWindow from '../ModalWindow';
 import { ShortcutsObject } from '../../../types/types';
-import { getDefaultShortcuts } from '../../../utils/KeyboardShortcutsUtil';
+import {
+  getDefaultShortcuts,
+  getUserConfig,
+} from '../../../utils/KeyboardShortcutsUtil';
 
 interface DefaultKeyboardShortcutsViewProps {
   noShortcuts: boolean;
@@ -44,12 +47,13 @@ const DefaultKeyboardShortcutsView = ({
 
   const openModalHandler = (
     shortcut: string,
-    action: string,
-    throttle?: number
+    actionName: string,
+    throttle?: number,
+    action: Function
   ) => {
     setIsEditModalOpen(true);
     setSelectedShortcutKey(shortcut);
-    setSelectedActionName(action);
+    setSelectedActionName(actionName);
     setSelectedThrottle(throttle);
   };
 
@@ -58,6 +62,7 @@ const DefaultKeyboardShortcutsView = ({
   };
 
   useEffect(() => {
+    getUserConfig();
     setDefaultShortcuts(getDefaultShortcuts());
   }, []);
 

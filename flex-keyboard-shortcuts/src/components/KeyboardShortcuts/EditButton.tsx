@@ -4,11 +4,12 @@ import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 interface EditButtonProps {
   shortcutKey: string;
   actionName: string;
-  throttle?: number;
+  throttle: number | undefined;
+  action: Function;
   openModalHandler: (
     shortcutKey: string,
     actionName: string,
-    throttle?: number
+    throttle: number | undefined
   ) => void;
 }
 

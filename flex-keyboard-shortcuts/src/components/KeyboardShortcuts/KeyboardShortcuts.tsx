@@ -1,23 +1,13 @@
-import * as FlexUI from '@twilio/flex-ui';
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
 
-import {
-  Tab,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Flex,
-} from '@twilio-paste/core';
+import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { Box, Heading } from '@twilio-paste/core';
 
 import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
 import Settings from './Settings/Settings';
-import { getShortcutsActions } from '../../utils/KeyboardShortcutsUtil';
 
 const KeyboardShortcuts = () => {
   const [noShortcuts, setNoShortcuts] = useState(false);
@@ -46,19 +36,6 @@ const KeyboardShortcuts = () => {
       dismissAfter: 4000,
     });
   };
-
-  useEffect(() => {
-    // const shortcutsConfig = localStorage.getItem('shortcutsConfig');
-    // if (shortcutsConfig) {
-    //   console.log(JSON.parse(shortcutsConfig));
-    //   FlexUI.KeyboardShortcutManager.addShortcuts(JSON.parse(shortcutsConfig));
-    // }
-    // Get action functions into string
-
-    console.log(FlexUI.KeyboardShortcutManager.keyboardShortcuts);
-    console.log(getShortcutsActions());
-    console.log(Object.values(getShortcutsActions()));
-  }, []);
 
   return (
     <Box overflow="auto" padding="space80" width="100%">

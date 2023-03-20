@@ -11,7 +11,11 @@ import KeyCommand from '../KeyCommand';
 import ModalWindow from '../ModalWindow';
 import DeleteButton from '../DeleteButton';
 import { ShortcutsObject } from '../../../types/types';
-import { getCustomShortcuts } from '../../../utils/KeyboardShortcutsUtil';
+import {
+  getCustomShortcuts,
+  getUserConfig,
+  getAllActions,
+} from '../../../utils/KeyboardShortcutsUtil';
 
 interface CustomKeyboardShortcutsViewProps {
   noShortcuts: boolean;
@@ -36,19 +40,23 @@ const CustomKeyboardShortcutsView = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
   const [selectedActionName, setSelectedActionName] = useState('');
+  const [selectedAction, setSelectedAction] = useState(Function);
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
     0
   );
 
   const openModalHandler = (
     shortcut: string,
-    action: string,
-    throttle?: number
+    actionName: string,
+    throttle: number | undefined
+    // action: Function
   ) => {
     setIsEditModalOpen(true);
     setSelectedShortcutKey(shortcut);
-    setSelectedActionName(action);
+    setSelectedActionName(actionName);
     setSelectedThrottle(throttle);
+    // setSelectedAction(action);
+    console.log('executing action');
   };
 
   const closeModalHandler = () => {
@@ -56,7 +64,9 @@ const CustomKeyboardShortcutsView = ({
   };
 
   useEffect(() => {
+    getUserConfig();
     setCustomShortcuts(getCustomShortcuts());
+    getAllActions();
   }, []);
 
   return (
@@ -126,6 +136,7 @@ const CustomKeyboardShortcutsView = ({
                           shortcutKey={item.key}
                           actionName={item.actionName}
                           throttle={item.throttle}
+                          action={item.action}
                           openModalHandler={openModalHandler}
                         />
                         {canDeleteShortcuts && (
@@ -153,6 +164,7 @@ const CustomKeyboardShortcutsView = ({
             closeModalHandler={closeModalHandler}
             selectedShortcutKey={selectedShortcutKey}
             selectedActionName={selectedActionName}
+            selectedAction={selectedAction}
             selectedThrottle={selectedThrottle}
             toasterSuccessNotification={toasterSuccessNotification}
             isThrottleEnabled={isThrottleEnabled}

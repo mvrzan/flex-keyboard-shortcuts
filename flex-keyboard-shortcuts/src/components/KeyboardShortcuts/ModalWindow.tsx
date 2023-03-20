@@ -11,12 +11,18 @@ import { Grid, Column, HelpText } from '@twilio-paste/core';
 import KeyCommand from './KeyCommand';
 import { defaultActions } from '@twilio/flex-ui';
 import { ShortcutsObject } from '../../types/types';
+import {
+  getAllShortcuts,
+  getCamelCase,
+  getAllActions,
+} from '../../utils/KeyboardShortcutsUtil';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
   isEditModalOpen: boolean;
   selectedShortcutKey: string;
   selectedActionName: string;
+  selectedAction: Function;
   selectedThrottle?: number;
   isThrottleEnabled: boolean;
   closeModalHandler: () => void;
@@ -35,6 +41,7 @@ const ModalWindow = ({
   closeModalHandler,
   selectedShortcutKey,
   selectedActionName,
+  selectedAction,
   selectedThrottle,
   setShortcuts,
   toasterSuccessNotification,
@@ -48,25 +55,18 @@ const ModalWindow = ({
   const titleInputID = useUID();
 
   const saveHandler = () => {
-    const camelCase = selectedActionName
-      .toLowerCase()
-      .split(' ')
-      .map((word, index) => {
-        if (index === 0) {
-          return word;
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join('');
+    const camelCase = getCamelCase(selectedActionName);
 
-    const shortcutKeys = shortcuts.map(item => item.key);
+    const shortcutKeys = getAllShortcuts().map(item => item.key);
     const checkShortcut =
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
     const indexPosition = shortcutKeys.indexOf(checkShortcut);
 
     if (shortcutKeys.indexOf(checkShortcut) !== -1) {
       setShortcutErrorMessage(
-        `A shortcut with key mapping ${checkShortcut} already exists and it is assigned to the ${shortcuts[indexPosition].actionName} action.`
+        `A shortcut with key mapping ${checkShortcut} already exists and it is assigned to the ${
+          getAllShortcuts()[indexPosition].actionName
+        } action.`
       );
       return;
     }
@@ -75,7 +75,8 @@ const ModalWindow = ({
       selectedShortcutKey,
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
       {
-        action: Flex.defaultActions[camelCase as keyof typeof defaultActions],
+        // action: Flex.defaultActions[camelCase as keyof typeof defaultActions],
+        action: getAllActions()[camelCase],
         name: selectedActionName,
         throttle: +throttleValue,
       }
@@ -85,8 +86,9 @@ const ModalWindow = ({
     closeModalHandler();
     setThrottleValue('');
 
-    shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].key = newShortcut;
-    shortcuts[shortcutKeys.indexOf(selectedShortcutKey)].throttle =
+    const shortcutKeys2 = shortcuts.map(item => item.key);
+    shortcuts[shortcutKeys2.indexOf(selectedShortcutKey)].key = newShortcut;
+    shortcuts[shortcutKeys2.indexOf(selectedShortcutKey)].throttle =
       +throttleValue;
 
     setShortcuts(shortcuts);
@@ -221,6 +223,7 @@ const ModalWindow = ({
               setNewShortcut('');
               closeModalHandler();
               setThrottleValue('');
+              setShortcutErrorMessage('');
             }}
           >
             Cancel

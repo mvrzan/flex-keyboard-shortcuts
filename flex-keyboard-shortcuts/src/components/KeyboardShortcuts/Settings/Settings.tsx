@@ -81,7 +81,7 @@ const Settings = ({
     toasterResetNotification();
     setNoShortcuts(false);
     setResetShortcuts(false);
-
+    localStorage.removeItem('shortcutsConfig');
     resetKeyboardShortcutsUtil();
   };
 
