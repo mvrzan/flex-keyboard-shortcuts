@@ -5,7 +5,6 @@ interface EditButtonProps {
   shortcutKey: string;
   actionName: string;
   throttle: number | undefined;
-  action: Function;
   openModalHandler: (
     shortcutKey: string,
     actionName: string,

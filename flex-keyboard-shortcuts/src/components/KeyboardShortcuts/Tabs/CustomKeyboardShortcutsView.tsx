@@ -14,13 +14,13 @@ import { ShortcutsObject } from '../../../types/types';
 import {
   getCustomShortcuts,
   getUserConfig,
-  getAllActions,
 } from '../../../utils/KeyboardShortcutsUtil';
 
 interface CustomKeyboardShortcutsViewProps {
+  reset: boolean;
   noShortcuts: boolean;
   isThrottleEnabled: boolean;
-  canDeleteShortcuts: boolean;
+  isDeleteShortcutsEnabled: boolean;
   toasterDeleteNotification: (actionName: string) => void;
   toasterSuccessNotification: (
     actionName: string,
@@ -30,9 +30,10 @@ interface CustomKeyboardShortcutsViewProps {
 }
 
 const CustomKeyboardShortcutsView = ({
+  reset,
   noShortcuts,
   isThrottleEnabled,
-  canDeleteShortcuts,
+  isDeleteShortcutsEnabled,
   toasterDeleteNotification,
   toasterSuccessNotification,
 }: CustomKeyboardShortcutsViewProps) => {
@@ -40,7 +41,6 @@ const CustomKeyboardShortcutsView = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
   const [selectedActionName, setSelectedActionName] = useState('');
-  const [selectedAction, setSelectedAction] = useState(Function);
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
     0
   );
@@ -49,14 +49,11 @@ const CustomKeyboardShortcutsView = ({
     shortcut: string,
     actionName: string,
     throttle: number | undefined
-    // action: Function
   ) => {
     setIsEditModalOpen(true);
     setSelectedShortcutKey(shortcut);
     setSelectedActionName(actionName);
     setSelectedThrottle(throttle);
-    // setSelectedAction(action);
-    console.log('executing action');
   };
 
   const closeModalHandler = () => {
@@ -66,8 +63,7 @@ const CustomKeyboardShortcutsView = ({
   useEffect(() => {
     getUserConfig();
     setCustomShortcuts(getCustomShortcuts());
-    getAllActions();
-  }, []);
+  }, [reset]);
 
   return (
     <>
@@ -136,10 +132,9 @@ const CustomKeyboardShortcutsView = ({
                           shortcutKey={item.key}
                           actionName={item.actionName}
                           throttle={item.throttle}
-                          action={item.action}
                           openModalHandler={openModalHandler}
                         />
-                        {canDeleteShortcuts && (
+                        {isDeleteShortcutsEnabled && (
                           <DeleteButton
                             shortcutKey={item.key}
                             actionName={item.actionName}
@@ -164,7 +159,6 @@ const CustomKeyboardShortcutsView = ({
             closeModalHandler={closeModalHandler}
             selectedShortcutKey={selectedShortcutKey}
             selectedActionName={selectedActionName}
-            selectedAction={selectedAction}
             selectedThrottle={selectedThrottle}
             toasterSuccessNotification={toasterSuccessNotification}
             isThrottleEnabled={isThrottleEnabled}

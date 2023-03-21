@@ -28,6 +28,10 @@ const DeleteButton = ({
 
     Flex.KeyboardShortcutManager.deleteShortcuts([shortcutKey]);
     toasterDeleteNotification(actionName);
+    localStorage.setItem(
+      'shortcutsConfig',
+      JSON.stringify(Flex.KeyboardShortcutManager.keyboardShortcuts)
+    );
   };
 
   return (

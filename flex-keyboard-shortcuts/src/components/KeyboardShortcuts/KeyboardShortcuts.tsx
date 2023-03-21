@@ -11,8 +11,9 @@ import Settings from './Settings/Settings';
 
 const KeyboardShortcuts = () => {
   const [noShortcuts, setNoShortcuts] = useState(false);
-  const [canDeleteShortcuts, setCanDeleteShortcuts] = useState(false);
+  const [isDeleteShortcutsEnabled, setCanDeleteShortcuts] = useState(false);
   const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
+  const [reset, setReset] = useState(false);
   const randomComponentId = useUID();
   const toaster = useToaster();
 
@@ -59,9 +60,11 @@ const KeyboardShortcuts = () => {
               Default keyboard shortcuts
             </Heading>
             <DefaultKeyboardShortcutsView
+              reset={reset}
+              setReset={setReset}
               noShortcuts={noShortcuts}
               isThrottleEnabled={isThrottleEnabled}
-              canDeleteShortcuts={canDeleteShortcuts}
+              isDeleteShortcutsEnabled={isDeleteShortcutsEnabled}
               toasterDeleteNotification={toasterDeleteNotification}
               toasterSuccessNotification={toasterSuccessNotification}
             />
@@ -71,9 +74,10 @@ const KeyboardShortcuts = () => {
               Custom keyboard shortcuts options
             </Heading>
             <CustomKeyboardShortcutsView
+              reset={reset}
               noShortcuts={noShortcuts}
               isThrottleEnabled={isThrottleEnabled}
-              canDeleteShortcuts={canDeleteShortcuts}
+              isDeleteShortcutsEnabled={isDeleteShortcutsEnabled}
               toasterDeleteNotification={toasterDeleteNotification}
               toasterSuccessNotification={toasterSuccessNotification}
             />
@@ -83,6 +87,7 @@ const KeyboardShortcuts = () => {
               setNoShortcuts={setNoShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}
               setCanDeleteShortcuts={setCanDeleteShortcuts}
+              setReset={setReset}
             />
           </TabPanel>
         </TabPanels>

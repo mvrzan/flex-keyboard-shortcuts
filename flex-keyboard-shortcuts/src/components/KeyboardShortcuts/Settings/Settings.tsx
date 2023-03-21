@@ -10,12 +10,14 @@ interface SettingsProps {
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
   setNoShortcuts: Dispatch<React.SetStateAction<boolean>>;
   setCanDeleteShortcuts: Dispatch<React.SetStateAction<boolean>>;
+  setReset: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Settings = ({
   setIsThrottleEnabled,
   setNoShortcuts,
   setCanDeleteShortcuts,
+  setReset,
 }: SettingsProps) => {
   const [throttling, setThrottling] = useState(false);
   const [deleteShortcut, setDeleteShortcut] = useState(false);
@@ -75,13 +77,16 @@ const Settings = ({
   const resetShortcutsHandler = () => {
     localStorage.removeItem('deleteShortcuts');
     setDeleteShortcut(false);
+    setCanDeleteShortcuts(false);
     localStorage.removeItem('enableThrottling');
     setThrottling(false);
+    setIsThrottleEnabled(false);
     localStorage.removeItem('removeAllShortcuts');
     toasterResetNotification();
     setNoShortcuts(false);
     setResetShortcuts(false);
     localStorage.removeItem('shortcutsConfig');
+    setReset(true);
     resetKeyboardShortcutsUtil();
   };
 

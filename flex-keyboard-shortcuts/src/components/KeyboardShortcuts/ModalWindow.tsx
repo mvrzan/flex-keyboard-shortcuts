@@ -9,20 +9,17 @@ import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
 import { Grid, Column, HelpText } from '@twilio-paste/core';
 
 import KeyCommand from './KeyCommand';
-import { defaultActions } from '@twilio/flex-ui';
+
 import { ShortcutsObject } from '../../types/types';
-import {
-  getAllShortcuts,
-  getCamelCase,
-  getAllActions,
-} from '../../utils/KeyboardShortcutsUtil';
+import { getAllShortcuts } from '../../utils/KeyboardShortcutsUtil';
+import { getCamelCase } from '../../utils/KeyboardShortcutsUtil';
+import { getAllActions } from '../../utils/KeyboardShortcutsUtil';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
   isEditModalOpen: boolean;
   selectedShortcutKey: string;
   selectedActionName: string;
-  selectedAction: Function;
   selectedThrottle?: number;
   isThrottleEnabled: boolean;
   closeModalHandler: () => void;
@@ -41,7 +38,6 @@ const ModalWindow = ({
   closeModalHandler,
   selectedShortcutKey,
   selectedActionName,
-  selectedAction,
   selectedThrottle,
   setShortcuts,
   toasterSuccessNotification,
@@ -75,7 +71,6 @@ const ModalWindow = ({
       selectedShortcutKey,
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
       {
-        // action: Flex.defaultActions[camelCase as keyof typeof defaultActions],
         action: getAllActions()[camelCase],
         name: selectedActionName,
         throttle: +throttleValue,
