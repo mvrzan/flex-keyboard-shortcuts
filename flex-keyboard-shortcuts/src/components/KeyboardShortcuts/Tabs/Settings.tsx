@@ -1,33 +1,35 @@
-import * as Flex from '@twilio/flex-ui';
-import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
+import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
+import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
+import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
 
 interface SettingsProps {
+  setReset: Dispatch<SetStateAction<boolean>>;
+  setNoShortcuts: Dispatch<SetStateAction<boolean>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
-  setNoShortcuts: Dispatch<React.SetStateAction<boolean>>;
-  setCanDeleteShortcuts: Dispatch<React.SetStateAction<boolean>>;
-  setReset: Dispatch<React.SetStateAction<boolean>>;
+  setIsDeleteShortcutsEnabled: Dispatch<SetStateAction<boolean>>;
 }
 
 const Settings = ({
-  setIsThrottleEnabled,
-  setNoShortcuts,
-  setCanDeleteShortcuts,
   setReset,
+  setNoShortcuts,
+  setIsThrottleEnabled,
+  setIsDeleteShortcutsEnabled,
 }: SettingsProps) => {
-  const [throttling, setThrottling] = useState(false);
-  const [deleteShortcut, setDeleteShortcut] = useState(false);
-  const [disableShortcuts, setDisabledShortcuts] = useState(false);
-  const [resetShortcuts, setResetShortcuts] = useState(false);
+  const [throttlingToggle, setThrottlingToggle] = useState(false);
+  const [deleteToggle, setDeleteToggle] = useState(false);
+  const [disableAllSetting, setDisableAllSetting] = useState(false);
+  const [resetSetting, setResetSetting] = useState(false);
   const toaster = useToaster();
 
-  const localDeleteSetting = localStorage.getItem('deleteShortcuts');
-  const localThrottlingSetting = localStorage.getItem('enableThrottling');
-  const localRemoveAllSetting = localStorage.getItem('removeAllShortcuts');
+  const localDeleteSetting = readFromLocalStorage('deleteShortcuts');
+  const localThrottlingSetting = readFromLocalStorage('enableThrottling');
+  const localRemoveAllSetting = readFromLocalStorage('removeAllShortcuts');
 
   const toasterShortcutsDisabledNotification = () => {
     toaster.push({
@@ -46,72 +48,77 @@ const Settings = ({
   };
 
   const throttlingHandler = () => {
-    setThrottling(!throttling);
-    setIsThrottleEnabled(!throttling);
-    localStorage.setItem(
+    setThrottlingToggle(!throttlingToggle);
+    setIsThrottleEnabled(!throttlingToggle);
+    writeToLocalStorage(
       'enableThrottling',
-      localStorage.getItem('enableThrottling') === 'true' ? 'false' : 'true'
+      readFromLocalStorage('enableThrottling') === 'true' ? 'false' : 'true'
     );
   };
 
   const deleteShortcutsHandler = () => {
-    setCanDeleteShortcuts(!deleteShortcut);
-    setDeleteShortcut(!deleteShortcut);
-    localStorage.setItem(
+    setIsDeleteShortcutsEnabled(!deleteToggle);
+    setDeleteToggle(!deleteToggle);
+    writeToLocalStorage(
       'deleteShortcuts',
-      localStorage.getItem('deleteShortcuts') === 'true' ? 'false' : 'true'
+      readFromLocalStorage('deleteShortcuts') === 'true' ? 'false' : 'true'
     );
   };
 
   const removeAllShortcutsHandler = () => {
-    Flex.KeyboardShortcutManager.disableShortcuts();
+    disableKeyboardShortcutsUtil();
     setNoShortcuts(true);
-    setDisabledShortcuts(false);
+    setDisableAllSetting(false);
     toasterShortcutsDisabledNotification();
-    localStorage.setItem(
+    writeToLocalStorage(
       'removeAllShortcuts',
-      localStorage.getItem('removeAllShortcuts') === 'true' ? 'false' : 'true'
+      readFromLocalStorage('removeAllShortcuts') === 'true' ? 'false' : 'true'
     );
   };
 
   const resetShortcutsHandler = () => {
-    localStorage.removeItem('deleteShortcuts');
-    setDeleteShortcut(false);
-    setCanDeleteShortcuts(false);
-    localStorage.removeItem('enableThrottling');
-    setThrottling(false);
+    setDeleteToggle(false);
+    setIsDeleteShortcutsEnabled(false);
+
+    setThrottlingToggle(false);
     setIsThrottleEnabled(false);
-    localStorage.removeItem('removeAllShortcuts');
-    toasterResetNotification();
+
     setNoShortcuts(false);
-    setResetShortcuts(false);
-    localStorage.removeItem('shortcutsConfig');
+    setResetSetting(false);
+
     setReset(true);
+
+    toasterResetNotification();
     resetKeyboardShortcutsUtil();
   };
 
   useEffect(() => {
     if (localDeleteSetting === 'true') {
-      setDeleteShortcut(true);
-      setCanDeleteShortcuts(true);
+      setDeleteToggle(true);
+      setIsDeleteShortcutsEnabled(true);
     }
     if (localThrottlingSetting === 'true') {
-      setThrottling(true);
+      setThrottlingToggle(true);
       setIsThrottleEnabled(true);
     }
     if (localRemoveAllSetting === 'true') {
-      setDisabledShortcuts(false);
+      setDisableAllSetting(false);
       setNoShortcuts(true);
-      Flex.KeyboardShortcutManager.disableShortcuts();
+      disableKeyboardShortcutsUtil();
     }
-  }, []);
+  }, [
+    localDeleteSetting,
+    localThrottlingSetting,
+    localRemoveAllSetting,
+    setIsDeleteShortcutsEnabled,
+    setIsThrottleEnabled,
+    setNoShortcuts,
+  ]);
 
   return (
     <>
+      {/* Toaster notifications based on setting actions*/}
       <Toaster {...toaster} />
-      <Heading as="h3" variant="heading30">
-        Keyboard shortcuts settings
-      </Heading>
       <Stack orientation="vertical" spacing="space60">
         <Card>
           <Heading as="h5" variant="heading50">
@@ -125,7 +132,7 @@ const Settings = ({
           </Paragraph>
           <Switch
             value="throttling"
-            checked={throttling}
+            checked={throttlingToggle}
             onChange={throttlingHandler}
           >
             Enable key throttling
@@ -141,7 +148,7 @@ const Settings = ({
           </Paragraph>
           <Switch
             value="delete"
-            checked={deleteShortcut}
+            checked={deleteToggle}
             onChange={deleteShortcutsHandler}
           >
             Delete individual shortcuts
@@ -152,16 +159,17 @@ const Settings = ({
             Remove all shortcuts
           </Heading>
           <Paragraph>
-            Remove all keyboard shortcuts, including the custom ones; your
-            shortcuts will no longer work. Please keep in mind that this action
-            cannot be reversed and you will have to reconfigure all of your
-            keyboard shortcuts. This is an irreversible action
+            Remove and disable all keyboard shortcuts, including the custom
+            ones; your shortcuts will no longer work. Please keep in mind that
+            this is an irreversible action and you will have to reconfigure all
+            of your keyboard shortcuts.
           </Paragraph>
-          {disableShortcuts ? (
+          {/* Once the setting is clicked, display the Save and Cancel buttons */}
+          {disableAllSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button
                 variant="secondary"
-                onClick={() => setDisabledShortcuts(false)}
+                onClick={() => setDisableAllSetting(false)}
               >
                 Cancel
               </Button>
@@ -170,12 +178,15 @@ const Settings = ({
               </Button>
             </Stack>
           ) : (
-            <Button
-              variant="destructive"
-              onClick={() => setDisabledShortcuts(true)}
-            >
-              Remove all shortcuts
-            </Button>
+            <>
+              {/* Default button presented to the user  */}
+              <Button
+                variant="destructive"
+                onClick={() => setDisableAllSetting(true)}
+              >
+                Remove all shortcuts
+              </Button>
+            </>
           )}
         </Card>
         <Card>
@@ -187,11 +198,12 @@ const Settings = ({
             option will delete all of the custom shortcut mappings and revert
             them to their original values. This is an irreversible action.
           </Paragraph>
-          {resetShortcuts ? (
+          {/* Once the setting is clicked, display the Save and Cancel buttons */}
+          {resetSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button
                 variant="secondary"
-                onClick={() => setResetShortcuts(false)}
+                onClick={() => setResetSetting(false)}
               >
                 Cancel
               </Button>
@@ -200,14 +212,17 @@ const Settings = ({
               </Button>
             </Stack>
           ) : (
-            <Button
-              variant="destructive"
-              onClick={() => {
-                setResetShortcuts(true);
-              }}
-            >
-              Reset keyboard shortcuts
-            </Button>
+            <>
+              {/* Default button presented to the user  */}
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  setResetSetting(true);
+                }}
+              >
+                Reset keyboard shortcuts
+              </Button>
+            </>
           )}
         </Card>
       </Stack>

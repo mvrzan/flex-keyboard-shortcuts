@@ -7,11 +7,12 @@ import { Box, Heading } from '@twilio-paste/core';
 
 import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
-import Settings from './Settings/Settings';
+import Settings from './Tabs/Settings';
 
 const KeyboardShortcuts = () => {
   const [noShortcuts, setNoShortcuts] = useState(false);
-  const [isDeleteShortcutsEnabled, setCanDeleteShortcuts] = useState(false);
+  const [isDeleteShortcutsEnabled, setIsDeleteShortcutsEnabled] =
+    useState(false);
   const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
   const [reset, setReset] = useState(false);
   const randomComponentId = useUID();
@@ -71,7 +72,7 @@ const KeyboardShortcuts = () => {
           </TabPanel>
           <TabPanel>
             <Heading as="h3" variant="heading30">
-              Custom keyboard shortcuts options
+              Custom keyboard shortcuts
             </Heading>
             <CustomKeyboardShortcutsView
               reset={reset}
@@ -83,11 +84,14 @@ const KeyboardShortcuts = () => {
             />
           </TabPanel>
           <TabPanel>
+            <Heading as="h3" variant="heading30">
+              Keyboard shortcuts settings
+            </Heading>
             <Settings
+              setReset={setReset}
               setNoShortcuts={setNoShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}
-              setCanDeleteShortcuts={setCanDeleteShortcuts}
-              setReset={setReset}
+              setIsDeleteShortcutsEnabled={setIsDeleteShortcutsEnabled}
             />
           </TabPanel>
         </TabPanels>

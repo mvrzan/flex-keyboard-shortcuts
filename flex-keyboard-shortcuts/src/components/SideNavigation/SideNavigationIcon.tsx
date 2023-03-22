@@ -1,16 +1,15 @@
 import { SideLink, Actions } from '@twilio/flex-ui';
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 
-interface OwnProps {
+interface SideNavigationProps {
   activeView?: string;
   viewName: string;
-  children?: React.ReactNode;
 }
 
-const SideNavigationIcon = (props: OwnProps) => {
+const SideNavigationIcon = ({ activeView, viewName }: SideNavigationProps) => {
   const navigateHandler = () => {
     Actions.invokeAction('NavigateToView', {
-      viewName: props.viewName,
+      viewName: viewName,
     });
   };
 
@@ -20,7 +19,7 @@ const SideNavigationIcon = (props: OwnProps) => {
       icon={<BsKeyboard />}
       iconActive={<BsKeyboardFill />}
       onClick={navigateHandler}
-      isActive={props.activeView === props.viewName}
+      isActive={activeView === viewName}
       key="KeyboardShortcuts"
     >
       Keyboard Shortcuts

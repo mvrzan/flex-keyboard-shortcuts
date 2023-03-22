@@ -5,6 +5,7 @@ import {
   initCustomShortcuts,
   presetCustomShortcuts,
 } from './CustomKeyboardShortcuts';
+import { deleteMultipleFromLocalStorage } from './LocalStorageUtil';
 
 export const getAllShortcuts = (): ShortcutsObject[] => {
   const shortcutValues = Object.entries(
@@ -55,8 +56,18 @@ export const getCustomShortcuts = (): ShortcutsObject[] => {
   return customShortcutValues;
 };
 
+export const disableKeyboardShortcutsUtil = () => {
+  Flex.KeyboardShortcutManager.disableShortcuts();
+};
+
 export const resetKeyboardShortcutsUtil = () => {
   Flex.KeyboardShortcutManager.disableShortcuts();
+  deleteMultipleFromLocalStorage([
+    'deleteShortcuts',
+    'enableThrottling',
+    'removeAllShortcuts',
+    'shortcutsConfig',
+  ]);
   Flex.KeyboardShortcutManager.init(Flex.defaultKeyboardShortcuts);
 };
 
