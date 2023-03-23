@@ -1,13 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import * as Flex from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 import { ShortcutsObject } from '../../types/types';
+import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
+import { getCurrentShortcuts } from '../../utils/KeyboardShortcutsUtil';
+import { deleteShortcutsUtil } from '../../utils/KeyboardShortcutsUtil';
 
 interface DeleteButtonProps {
-  shortcutKey: string;
   actionName: string;
+  shortcutKey: string;
   shortcuts: ShortcutsObject[];
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
   toasterDeleteNotification: (actionName: string) => void;
@@ -19,19 +21,16 @@ const DeleteButton = ({
   shortcuts,
   setShortcuts,
   toasterDeleteNotification,
-}: DeleteButtonProps) => {
-  const deleteShortcutHandler = () => {
-    const updatedDefaultShortcuts = shortcuts.filter(
+}: DeleteButtonProps): JSX.Element => {
+  const deleteShortcutHandler = (): void => {
+    const updatedShortcuts = shortcuts.filter(
       shortcut => shortcut.key !== shortcutKey
     );
-    setShortcuts(updatedDefaultShortcuts);
+    setShortcuts(updatedShortcuts);
 
-    Flex.KeyboardShortcutManager.deleteShortcuts([shortcutKey]);
+    deleteShortcutsUtil(shortcutKey);
     toasterDeleteNotification(actionName);
-    localStorage.setItem(
-      'shortcutsConfig',
-      JSON.stringify(Flex.KeyboardShortcutManager.keyboardShortcuts)
-    );
+    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
   };
 
   return (

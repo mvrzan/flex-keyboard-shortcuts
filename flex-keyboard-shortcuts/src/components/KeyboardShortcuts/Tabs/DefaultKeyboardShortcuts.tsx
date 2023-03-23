@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import { Paragraph } from '@twilio-paste/core';
 import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
 import { Box, Tooltip, Text, Heading, Stack, Card } from '@twilio-paste/core';
@@ -10,12 +10,10 @@ import EditButton from '../EditButton';
 import DeleteButton from '../DeleteButton';
 import ModalWindow from '../ModalWindow';
 import { ShortcutsObject } from '../../../types/types';
-import { getUserConfig } from '../../../utils/KeyboardShortcutsUtil';
 import { getDefaultShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 
 interface DefaultKeyboardShortcutsViewProps {
   reset: boolean;
-  setReset: Dispatch<SetStateAction<boolean>>;
   noShortcuts: boolean;
   isThrottleEnabled: boolean;
   isDeleteShortcutsEnabled: boolean;
@@ -29,7 +27,6 @@ interface DefaultKeyboardShortcutsViewProps {
 
 const DefaultKeyboardShortcutsView = ({
   reset,
-  setReset,
   noShortcuts,
   isThrottleEnabled,
   isDeleteShortcutsEnabled,
@@ -39,9 +36,9 @@ const DefaultKeyboardShortcutsView = ({
   const [defaultShortcuts, setDefaultShortcuts] = useState<ShortcutsObject[]>(
     []
   );
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
-  const [selectedActionName, setSelectedActionName] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
+  const [selectedActionName, setSelectedActionName] = useState<string>('');
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
     0
   );
@@ -50,30 +47,20 @@ const DefaultKeyboardShortcutsView = ({
     shortcut: string,
     actionName: string,
     throttle?: number
-  ) => {
+  ): void => {
     setIsEditModalOpen(true);
+    setSelectedThrottle(throttle);
     setSelectedShortcutKey(shortcut);
     setSelectedActionName(actionName);
-    setSelectedThrottle(throttle);
   };
 
-  const closeModalHandler = () => {
+  const closeModalHandler = (): void => {
     setIsEditModalOpen(false);
   };
 
-  // useEffect(() => {
-  //   getUserConfig();
-  //   setDefaultShortcuts(getDefaultShortcuts());
-  // }, []);
-
   useEffect(() => {
-    if (reset) {
-      setDefaultShortcuts(getDefaultShortcuts());
-      setReset(false);
-    }
-    getUserConfig();
     setDefaultShortcuts(getDefaultShortcuts());
-  }, [reset, setReset]);
+  }, [reset]);
 
   return (
     <>

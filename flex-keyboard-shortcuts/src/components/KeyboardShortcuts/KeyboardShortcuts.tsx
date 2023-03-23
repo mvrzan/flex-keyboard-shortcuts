@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
 
-import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
-import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { Box, Heading } from '@twilio-paste/core';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 
-import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
-import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
 import Settings from './Tabs/Settings';
+import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
+import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 
 const KeyboardShortcuts = () => {
   const [noShortcuts, setNoShortcuts] = useState(false);
@@ -62,7 +62,6 @@ const KeyboardShortcuts = () => {
             </Heading>
             <DefaultKeyboardShortcutsView
               reset={reset}
-              setReset={setReset}
               noShortcuts={noShortcuts}
               isThrottleEnabled={isThrottleEnabled}
               isDeleteShortcutsEnabled={isDeleteShortcutsEnabled}

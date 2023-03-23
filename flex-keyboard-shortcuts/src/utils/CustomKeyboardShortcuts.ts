@@ -69,17 +69,3 @@ export const presetCustomShortcuts = {
     throttle: 100,
   },
 };
-
-export const initCustomShortcuts = () => {
-  const customShortcutsValue = Object.entries(presetCustomShortcuts).map(
-    item => {
-      return {
-        key: item[0],
-        actionName: item[1].name,
-        throttle: item[1]?.throttle,
-      };
-    }
-  );
-
-  return customShortcutsValue;
-};

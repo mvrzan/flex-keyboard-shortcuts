@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
-import { Tooltip, Text, Stack, Box } from '@twilio-paste/core';
 import { Heading, Paragraph, Card } from '@twilio-paste/core';
+import { Tooltip, Text, Stack, Box } from '@twilio-paste/core';
+import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
 import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
@@ -11,10 +11,7 @@ import KeyCommand from '../KeyCommand';
 import ModalWindow from '../ModalWindow';
 import DeleteButton from '../DeleteButton';
 import { ShortcutsObject } from '../../../types/types';
-import {
-  getCustomShortcuts,
-  getUserConfig,
-} from '../../../utils/KeyboardShortcutsUtil';
+import { getCustomShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 
 interface CustomKeyboardShortcutsViewProps {
   reset: boolean;
@@ -38,9 +35,9 @@ const CustomKeyboardShortcutsView = ({
   toasterSuccessNotification,
 }: CustomKeyboardShortcutsViewProps) => {
   const [customShortcuts, setCustomShortcuts] = useState<ShortcutsObject[]>([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedShortcutKey, setSelectedShortcutKey] = useState('');
-  const [selectedActionName, setSelectedActionName] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
+  const [selectedActionName, setSelectedActionName] = useState<string>('');
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
     0
   );
@@ -49,19 +46,18 @@ const CustomKeyboardShortcutsView = ({
     shortcut: string,
     actionName: string,
     throttle: number | undefined
-  ) => {
+  ): void => {
     setIsEditModalOpen(true);
+    setSelectedThrottle(throttle);
     setSelectedShortcutKey(shortcut);
     setSelectedActionName(actionName);
-    setSelectedThrottle(throttle);
   };
 
-  const closeModalHandler = () => {
+  const closeModalHandler = (): void => {
     setIsEditModalOpen(false);
   };
 
   useEffect(() => {
-    getUserConfig();
     setCustomShortcuts(getCustomShortcuts());
   }, [reset]);
 
@@ -130,8 +126,8 @@ const CustomKeyboardShortcutsView = ({
                       <Stack orientation="horizontal" spacing="space30">
                         <EditButton
                           shortcutKey={item.key}
-                          actionName={item.actionName}
                           throttle={item.throttle}
+                          actionName={item.actionName}
                           openModalHandler={openModalHandler}
                         />
                         {isDeleteShortcutsEnabled && (

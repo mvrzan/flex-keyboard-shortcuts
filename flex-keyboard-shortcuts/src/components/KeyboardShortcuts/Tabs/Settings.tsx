@@ -3,10 +3,10 @@ import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
+import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
 import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
 import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
-import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
-import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
 
 interface SettingsProps {
   setReset: Dispatch<SetStateAction<boolean>>;
@@ -21,17 +21,17 @@ const Settings = ({
   setIsThrottleEnabled,
   setIsDeleteShortcutsEnabled,
 }: SettingsProps) => {
-  const [throttlingToggle, setThrottlingToggle] = useState(false);
-  const [deleteToggle, setDeleteToggle] = useState(false);
-  const [disableAllSetting, setDisableAllSetting] = useState(false);
-  const [resetSetting, setResetSetting] = useState(false);
+  const [throttlingToggle, setThrottlingToggle] = useState<boolean>(false);
+  const [deleteToggle, setDeleteToggle] = useState<boolean>(false);
+  const [disableAllSetting, setDisableAllSetting] = useState<boolean>(false);
+  const [resetSetting, setResetSetting] = useState<boolean>(false);
   const toaster = useToaster();
 
   const localDeleteSetting = readFromLocalStorage('deleteShortcuts');
   const localThrottlingSetting = readFromLocalStorage('enableThrottling');
   const localRemoveAllSetting = readFromLocalStorage('removeAllShortcuts');
 
-  const toasterShortcutsDisabledNotification = () => {
+  const toasterShortcutsDisabledNotification = (): void => {
     toaster.push({
       message: `All keyboard shortcuts have been disabled.`,
       variant: 'error',
@@ -39,7 +39,7 @@ const Settings = ({
     });
   };
 
-  const toasterResetNotification = () => {
+  const toasterResetNotification = (): void => {
     toaster.push({
       message: `All keyboard shortcuts have been reset to the default values!`,
       variant: 'warning',
@@ -47,7 +47,7 @@ const Settings = ({
     });
   };
 
-  const throttlingHandler = () => {
+  const throttlingHandler = (): void => {
     setThrottlingToggle(!throttlingToggle);
     setIsThrottleEnabled(!throttlingToggle);
     writeToLocalStorage(
@@ -56,7 +56,7 @@ const Settings = ({
     );
   };
 
-  const deleteShortcutsHandler = () => {
+  const deleteShortcutsHandler = (): void => {
     setIsDeleteShortcutsEnabled(!deleteToggle);
     setDeleteToggle(!deleteToggle);
     writeToLocalStorage(
@@ -65,7 +65,7 @@ const Settings = ({
     );
   };
 
-  const removeAllShortcutsHandler = () => {
+  const removeAllShortcutsHandler = (): void => {
     disableKeyboardShortcutsUtil();
     setNoShortcuts(true);
     setDisableAllSetting(false);
@@ -76,7 +76,7 @@ const Settings = ({
     );
   };
 
-  const resetShortcutsHandler = () => {
+  const resetShortcutsHandler = (): void => {
     setDeleteToggle(false);
     setIsDeleteShortcutsEnabled(false);
 

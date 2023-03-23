@@ -2,8 +2,8 @@ import { Button } from '@twilio-paste/core';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 
 interface EditButtonProps {
-  shortcutKey: string;
   actionName: string;
+  shortcutKey: string;
   throttle: number | undefined;
   openModalHandler: (
     shortcutKey: string,
@@ -17,7 +17,7 @@ const EditButton = ({
   actionName,
   throttle,
   openModalHandler,
-}: EditButtonProps) => {
+}: EditButtonProps): JSX.Element => {
   const clickHandler = (
     shortcutKey: string,
     actionName: string,

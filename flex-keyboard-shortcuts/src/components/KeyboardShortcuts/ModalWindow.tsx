@@ -1,19 +1,21 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import * as Flex from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
 
-import { ModalHeading, ModalFooterActions } from '@twilio-paste/core';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
-import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
-import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
 import { Grid, Column, HelpText } from '@twilio-paste/core';
+import { ModalHeading, ModalFooterActions } from '@twilio-paste/core';
+import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
+import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
 
 import KeyCommand from './KeyCommand';
 
 import { ShortcutsObject } from '../../types/types';
-import { getAllShortcuts } from '../../utils/KeyboardShortcutsUtil';
 import { getCamelCase } from '../../utils/KeyboardShortcutsUtil';
 import { getAllActions } from '../../utils/KeyboardShortcutsUtil';
+import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
+import { getAllShortcuts } from '../../utils/KeyboardShortcutsUtil';
+import { getCurrentShortcuts } from '../../utils/KeyboardShortcutsUtil';
+import { addKeyboardShortcutUtil } from '../../utils/KeyboardShortcutsUtil';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
@@ -42,56 +44,48 @@ const ModalWindow = ({
   setShortcuts,
   toasterSuccessNotification,
 }: ModalProps) => {
-  const [throttleValue, setThrottleValue] = useState('');
-  const [newShortcut, setNewShortcut] = useState('');
-  const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(true);
-  const [shortcutErrorMessage, setShortcutErrorMessage] = useState('');
+  const [throttleValue, setThrottleValue] = useState<string>('');
+  const [newShortcut, setNewShortcut] = useState<string>('');
+  const [isSaveButtonVisible, setIsSaveButtonVisible] = useState<boolean>(true);
+  const [shortcutErrorMessage, setShortcutErrorMessage] = useState<string>('');
 
   const modalHeadingID = useUID();
   const titleInputID = useUID();
 
-  const saveHandler = () => {
-    const camelCase = getCamelCase(selectedActionName);
-
+  const saveHandler = (): void => {
+    const actionFunction = getCamelCase(selectedActionName);
     const shortcutKeys = getAllShortcuts().map(item => item.key);
-    const checkShortcut =
+    const parsedShortcut =
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
-    const indexPosition = shortcutKeys.indexOf(checkShortcut);
+    const indexPosition = shortcutKeys.indexOf(parsedShortcut);
+    const shortcutObject = {
+      action: getAllActions()[actionFunction],
+      name: selectedActionName,
+      throttle: +throttleValue,
+    };
 
-    if (shortcutKeys.indexOf(checkShortcut) !== -1) {
+    if (shortcutKeys.indexOf(parsedShortcut) !== -1) {
       setShortcutErrorMessage(
-        `A shortcut with key mapping ${checkShortcut} already exists and it is assigned to the ${
+        `A shortcut with key mapping ${parsedShortcut} already exists and it is assigned to the ${
           getAllShortcuts()[indexPosition].actionName
         } action.`
       );
       return;
     }
 
-    Flex.KeyboardShortcutManager.remapShortcut(
-      selectedShortcutKey,
-      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut,
-      {
-        action: getAllActions()[camelCase],
-        name: selectedActionName,
-        throttle: +throttleValue,
-      }
-    );
+    addKeyboardShortcutUtil(selectedShortcutKey, newShortcut, shortcutObject);
 
     setNewShortcut('');
     closeModalHandler();
     setThrottleValue('');
 
-    const shortcutKeys2 = shortcuts.map(item => item.key);
-    shortcuts[shortcutKeys2.indexOf(selectedShortcutKey)].key = newShortcut;
-    shortcuts[shortcutKeys2.indexOf(selectedShortcutKey)].throttle =
+    const updatedShortcuts = shortcuts.map(item => item.key);
+    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].key = newShortcut;
+    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].throttle =
       +throttleValue;
 
     setShortcuts(shortcuts);
-
-    localStorage.setItem(
-      'shortcutsConfig',
-      JSON.stringify(Flex.KeyboardShortcutManager.keyboardShortcuts)
-    );
+    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
 
     toasterSuccessNotification(
       selectedActionName,
