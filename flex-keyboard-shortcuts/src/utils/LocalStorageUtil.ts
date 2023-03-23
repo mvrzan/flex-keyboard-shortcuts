@@ -4,9 +4,7 @@ export const readFromLocalStorage = (key: string) => {
   }
 
   try {
-    const value = localStorage.getItem(key);
-    console.log(`${key} successfully read from localStorage.`);
-    return value;
+    return localStorage.getItem(key);
   } catch (error) {
     console.error(error);
     throw new Error(`Unable to read ${key} from localStorage.`);
@@ -21,10 +19,8 @@ export const writeToLocalStorage = (key: string, value: string | object) => {
   try {
     if (typeof value === 'object') {
       localStorage.setItem(key, JSON.stringify(value));
-      console.log(`${key} successfully added to localStorage.`);
     } else {
       localStorage.setItem(key, value);
-      console.log(`${key} successfully added to localStorage.`);
     }
   } catch (error) {
     console.error(error);
@@ -39,7 +35,6 @@ export const deleteFromLocalStorage = (key: string) => {
 
   try {
     localStorage.removeItem(key);
-    console.log(`${key} successfully deleted from localStorage.`);
   } catch (error) {
     console.error(error);
     throw new Error(`Unable to delete ${key} from localStorage.`);
@@ -54,7 +49,6 @@ export const deleteMultipleFromLocalStorage = (key: string[]) => {
   try {
     const keyArray: string[] = key;
     keyArray.forEach((key: string) => localStorage.removeItem(key));
-    console.log(`${key} successfully deleted from localStorage.`);
   } catch (error) {
     console.error(error);
     throw new Error(`Unable to delete ${key} from localStorage.`);
