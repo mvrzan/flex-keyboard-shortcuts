@@ -52,6 +52,10 @@ With the release of Flex 2.1, Flex now supports keyboards shortcuts for the most
 
 The 2.1 Flex UI exposes various APIs to interact with the default keyboard shortcuts, as well as adding custom ones. The official documentation can be found [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts).
 
+### How are you persisting changes between refreshes?
+
+User modification to both default and custom keyboard shortcuts are stored into browser local storage and read during plugin initialization.
+
 ### Supported Flex version
 
 This plugin only supports Twilio Flex 2.1 and above because support for keyboard shortcuts has been introduced with Flex 2.1.
