@@ -98,6 +98,18 @@ Twilio Flex comes with a list of default shortcuts which can be found [here](htt
 
 ### Custom keyboard shortcuts
 
+With the help of new Flex APIs, it is possible to add custom shortcuts like described [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts#add-custom-shortcuts). The following list of custom shortuts are all custom values preconfigured as a part of this plugin.
+
+| Action                            | Description                                                                                                                                                                                                                | Shortcut         |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Toggle dialpad                    | Open and close the dialpad                                                                                                                                                                                                 | CTRL + SHIFT + D |
+| Toggle sidebar                    | Open and close the sidebar                                                                                                                                                                                                 | CTRL + SHIFT + Q |
+| Navigate to tasks                 | Navigate to the Tasks view                                                                                                                                                                                                 | CTRL + SHIFT + K |
+| Debugging assistance              | A debugging assistenance shortcut that looks various Agent information into the browser console for easy assistance. Currently logged information includes: account SID, worker SID, workspace SID, and worker attributes. | CTRL + SHIFT + 9 |
+| Navigate to keyboard shortcuts    | Navigate to the Keyboard Shortcuts manager                                                                                                                                                                                 | CTRL + SHIFT + L |
+| Navigate to Teams View            | Open the Teams View                                                                                                                                                                                                        | CTRL + SHIFT + I |
+| Navigate to Real-time Queues View | Open Real-time Queues View                                                                                                                                                                                                 | CTRL + SHIFT + O |
+
 ### Supported Flex version
 
 This plugin only supports Twilio Flex 2.1 and above because support for keyboard shortcuts has been introduced with Flex 2.1.
