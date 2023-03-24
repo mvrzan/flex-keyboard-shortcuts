@@ -54,15 +54,3 @@ export const deleteMultipleFromLocalStorage = (key: string[]) => {
     throw new Error(`Unable to delete ${key} from localStorage.`);
   }
 };
-
-// export const parseLocalStorageJSON = (key: string) => {
-//   if (!key || typeof key !== 'string') {
-//     throw new Error('Invalid key');
-//   }
-
-//   try {
-//     return JSON.parse(localStorage.getItem(key));
-//   } catch {
-//     return localStorage.getItem(key);
-//   }
-// };

@@ -10,7 +10,7 @@ import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
 import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 
 const KeyboardShortcuts = () => {
-  const [noShortcuts, setNoShortcuts] = useState(false);
+  const [disableShortcuts, setDisableShortcuts] = useState(false);
   const [isDeleteShortcutsEnabled, setIsDeleteShortcutsEnabled] =
     useState(false);
   const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
@@ -62,7 +62,7 @@ const KeyboardShortcuts = () => {
             </Heading>
             <DefaultKeyboardShortcutsView
               reset={reset}
-              noShortcuts={noShortcuts}
+              disableShortcuts={disableShortcuts}
               isThrottleEnabled={isThrottleEnabled}
               isDeleteShortcutsEnabled={isDeleteShortcutsEnabled}
               toasterDeleteNotification={toasterDeleteNotification}
@@ -75,7 +75,7 @@ const KeyboardShortcuts = () => {
             </Heading>
             <CustomKeyboardShortcutsView
               reset={reset}
-              noShortcuts={noShortcuts}
+              disableShortcuts={disableShortcuts}
               isThrottleEnabled={isThrottleEnabled}
               isDeleteShortcutsEnabled={isDeleteShortcutsEnabled}
               toasterDeleteNotification={toasterDeleteNotification}
@@ -88,7 +88,7 @@ const KeyboardShortcuts = () => {
             </Heading>
             <Settings
               setReset={setReset}
-              setNoShortcuts={setNoShortcuts}
+              setDisableShortcuts={setDisableShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}
               setIsDeleteShortcutsEnabled={setIsDeleteShortcutsEnabled}
             />

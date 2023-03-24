@@ -15,7 +15,7 @@ import { getAllActions } from '../../utils/KeyboardShortcutsUtil';
 import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
 import { getAllShortcuts } from '../../utils/KeyboardShortcutsUtil';
 import { getCurrentShortcuts } from '../../utils/KeyboardShortcutsUtil';
-import { addKeyboardShortcutUtil } from '../../utils/KeyboardShortcutsUtil';
+import { remapKeyboardShortcutUtil } from '../../utils/KeyboardShortcutsUtil';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
@@ -64,6 +64,7 @@ const ModalWindow = ({
       throttle: +throttleValue,
     };
 
+    setShortcutErrorMessage('');
     if (shortcutKeys.indexOf(parsedShortcut) !== -1) {
       setShortcutErrorMessage(
         `A shortcut with key mapping ${parsedShortcut} already exists and it is assigned to the ${
@@ -73,20 +74,18 @@ const ModalWindow = ({
       return;
     }
 
-    addKeyboardShortcutUtil(selectedShortcutKey, newShortcut, shortcutObject);
-
-    setNewShortcut('');
-    closeModalHandler();
-    setThrottleValue('');
+    remapKeyboardShortcutUtil(selectedShortcutKey, newShortcut, shortcutObject);
 
     const updatedShortcuts = shortcuts.map(item => item.key);
     shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].key = newShortcut;
     shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].throttle =
       +throttleValue;
-
     setShortcuts(shortcuts);
-    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
 
+    closeModalHandler();
+    setNewShortcut('');
+    setThrottleValue('');
+    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
     toasterSuccessNotification(
       selectedActionName,
       selectedShortcutKey,

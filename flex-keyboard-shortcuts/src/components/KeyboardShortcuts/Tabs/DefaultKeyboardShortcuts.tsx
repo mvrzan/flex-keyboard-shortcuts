@@ -14,7 +14,7 @@ import { getDefaultShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 
 interface DefaultKeyboardShortcutsViewProps {
   reset: boolean;
-  noShortcuts: boolean;
+  disableShortcuts: boolean;
   isThrottleEnabled: boolean;
   isDeleteShortcutsEnabled: boolean;
   toasterDeleteNotification: (actionName: string) => void;
@@ -27,7 +27,7 @@ interface DefaultKeyboardShortcutsViewProps {
 
 const DefaultKeyboardShortcutsView = ({
   reset,
-  noShortcuts,
+  disableShortcuts,
   isThrottleEnabled,
   isDeleteShortcutsEnabled,
   toasterDeleteNotification,
@@ -36,6 +36,7 @@ const DefaultKeyboardShortcutsView = ({
   const [defaultShortcuts, setDefaultShortcuts] = useState<ShortcutsObject[]>(
     []
   );
+  const [shortcutsDeleted, setShortcutsDeleted] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
   const [selectedActionName, setSelectedActionName] = useState<string>('');
@@ -60,11 +61,19 @@ const DefaultKeyboardShortcutsView = ({
 
   useEffect(() => {
     setDefaultShortcuts(getDefaultShortcuts());
+    setShortcutsDeleted(false);
   }, [reset]);
+
+  useEffect(() => {
+    if (Object.keys(getDefaultShortcuts()).length === 0) {
+      setShortcutsDeleted(true);
+    }
+  }, [defaultShortcuts]);
 
   return (
     <>
-      {noShortcuts ? (
+      {/* Check if shortcuts have been disabled or deleted  */}
+      {disableShortcuts || shortcutsDeleted ? (
         <Card>
           <Heading as="h5" variant="heading50">
             <Stack orientation="horizontal" spacing="space20">
@@ -78,89 +87,92 @@ const DefaultKeyboardShortcutsView = ({
           </Paragraph>
         </Card>
       ) : (
-        <Box overflowY="auto" maxHeight="1000px">
-          <Table>
-            <THead stickyHeader top={0}>
-              <Tr>
-                <Th>
-                  <Stack orientation="horizontal" spacing="space30">
-                    <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
-                      <Text as="span">Modifiers</Text>
-                    </Tooltip>
-                    <InformationIcon decorative={false} title="modifiers" />
-                  </Stack>
-                </Th>
-                <Th>
-                  <Text as="span">Shortcuts</Text>
-                </Th>
-                <Th>
-                  <Text as="span">Actions</Text>
-                </Th>
-                {isThrottleEnabled && (
+        <>
+          {/* Present a table if there are shortcuts to present */}
+          <Box overflowY="auto" maxHeight="1000px">
+            <Table>
+              <THead stickyHeader top={0}>
+                <Tr>
                   <Th>
-                    <Text as="span">Throttle (ms)</Text>
+                    <Stack orientation="horizontal" spacing="space30">
+                      <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
+                        <Text as="span">Modifiers</Text>
+                      </Tooltip>
+                      <InformationIcon decorative={false} title="modifiers" />
+                    </Stack>
                   </Th>
-                )}
-                <Th>
-                  <Text as="span">Edit</Text>
-                </Th>
-              </Tr>
-            </THead>
-            <TBody>
-              {defaultShortcuts.map(item => {
-                return (
-                  <Tr key={item.key}>
-                    <Td>
-                      <KeyCommand keyCommand="Ctrl" /> +{' '}
-                      <KeyCommand keyCommand="Shift" />
-                    </Td>
-                    <Td>
-                      <KeyCommand keyCommand={item.key} />{' '}
-                    </Td>
-                    <Td>{item.actionName}</Td>
-                    {isThrottleEnabled && (
+                  <Th>
+                    <Text as="span">Shortcuts</Text>
+                  </Th>
+                  <Th>
+                    <Text as="span">Actions</Text>
+                  </Th>
+                  {isThrottleEnabled && (
+                    <Th>
+                      <Text as="span">Throttle (ms)</Text>
+                    </Th>
+                  )}
+                  <Th>
+                    <Text as="span">Edit</Text>
+                  </Th>
+                </Tr>
+              </THead>
+              <TBody>
+                {defaultShortcuts.map(item => {
+                  return (
+                    <Tr key={item.key}>
                       <Td>
-                        {item.throttle ? item.throttle : 'Not configured'}
+                        <KeyCommand keyCommand="Ctrl" /> +{' '}
+                        <KeyCommand keyCommand="Shift" />
                       </Td>
-                    )}
-                    <Td>
-                      <Stack orientation="horizontal" spacing="space30">
-                        <EditButton
-                          shortcutKey={item.key}
-                          actionName={item.actionName}
-                          throttle={item.throttle}
-                          openModalHandler={openModalHandler}
-                        />
-                        {isDeleteShortcutsEnabled && (
-                          <DeleteButton
+                      <Td>
+                        <KeyCommand keyCommand={item.key} />{' '}
+                      </Td>
+                      <Td>{item.actionName}</Td>
+                      {isThrottleEnabled && (
+                        <Td>
+                          {item.throttle ? item.throttle : 'Not configured'}
+                        </Td>
+                      )}
+                      <Td>
+                        <Stack orientation="horizontal" spacing="space30">
+                          <EditButton
                             shortcutKey={item.key}
                             actionName={item.actionName}
-                            shortcuts={defaultShortcuts}
-                            setShortcuts={setDefaultShortcuts}
-                            toasterDeleteNotification={
-                              toasterDeleteNotification
-                            }
+                            throttle={item.throttle}
+                            openModalHandler={openModalHandler}
                           />
-                        )}
-                      </Stack>
-                    </Td>
-                  </Tr>
-                );
-              })}
-            </TBody>
-          </Table>
-          <ModalWindow
-            shortcuts={defaultShortcuts}
-            setShortcuts={setDefaultShortcuts}
-            isEditModalOpen={isEditModalOpen}
-            closeModalHandler={closeModalHandler}
-            selectedShortcutKey={selectedShortcutKey}
-            selectedActionName={selectedActionName}
-            selectedThrottle={selectedThrottle}
-            toasterSuccessNotification={toasterSuccessNotification}
-            isThrottleEnabled={isThrottleEnabled}
-          />
-        </Box>
+                          {isDeleteShortcutsEnabled && (
+                            <DeleteButton
+                              shortcutKey={item.key}
+                              actionName={item.actionName}
+                              shortcuts={defaultShortcuts}
+                              setShortcuts={setDefaultShortcuts}
+                              toasterDeleteNotification={
+                                toasterDeleteNotification
+                              }
+                            />
+                          )}
+                        </Stack>
+                      </Td>
+                    </Tr>
+                  );
+                })}
+              </TBody>
+            </Table>
+            <ModalWindow
+              shortcuts={defaultShortcuts}
+              setShortcuts={setDefaultShortcuts}
+              isEditModalOpen={isEditModalOpen}
+              closeModalHandler={closeModalHandler}
+              selectedShortcutKey={selectedShortcutKey}
+              selectedActionName={selectedActionName}
+              selectedThrottle={selectedThrottle}
+              toasterSuccessNotification={toasterSuccessNotification}
+              isThrottleEnabled={isThrottleEnabled}
+            />
+          </Box>
+        </>
       )}
     </>
   );

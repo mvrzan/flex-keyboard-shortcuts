@@ -10,14 +10,14 @@ import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUt
 
 interface SettingsProps {
   setReset: Dispatch<SetStateAction<boolean>>;
-  setNoShortcuts: Dispatch<SetStateAction<boolean>>;
+  setDisableShortcuts: Dispatch<SetStateAction<boolean>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
   setIsDeleteShortcutsEnabled: Dispatch<SetStateAction<boolean>>;
 }
 
 const Settings = ({
   setReset,
-  setNoShortcuts,
+  setDisableShortcuts,
   setIsThrottleEnabled,
   setIsDeleteShortcutsEnabled,
 }: SettingsProps) => {
@@ -67,7 +67,7 @@ const Settings = ({
 
   const removeAllShortcutsHandler = (): void => {
     disableKeyboardShortcutsUtil();
-    setNoShortcuts(true);
+    setDisableShortcuts(true);
     setDisableAllSetting(false);
     toasterShortcutsDisabledNotification();
     writeToLocalStorage(
@@ -83,7 +83,7 @@ const Settings = ({
     setThrottlingToggle(false);
     setIsThrottleEnabled(false);
 
-    setNoShortcuts(false);
+    setDisableShortcuts(false);
     setResetSetting(false);
 
     setReset(true);
@@ -103,7 +103,7 @@ const Settings = ({
     }
     if (localRemoveAllSetting === 'true') {
       setDisableAllSetting(false);
-      setNoShortcuts(true);
+      setDisableShortcuts(true);
       disableKeyboardShortcutsUtil();
     }
   }, [
@@ -112,7 +112,7 @@ const Settings = ({
     localRemoveAllSetting,
     setIsDeleteShortcutsEnabled,
     setIsThrottleEnabled,
-    setNoShortcuts,
+    setDisableShortcuts,
   ]);
 
   return (
