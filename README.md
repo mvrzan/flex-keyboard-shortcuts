@@ -4,21 +4,51 @@
 
 # Keyboard Shortcuts Manager - Flex 2.1+
 
-Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
+Twilio Flex plugin that empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex.
+
+# Table of Contents
+
+- [Keyboard Shortcuts Manager - Flex 2.1+](#keyboard-shortcuts-manager---flex-21)
+- [Table of Contents](#table-of-contents)
+  - [What does it do?](#what-does-it-do)
+  - [How does this work?](#how-does-this-work)
+    - [How are you persisting changes between refreshes?](#how-are-you-persisting-changes-between-refreshes)
+    - [Default keyboard shortcuts](#default-keyboard-shortcuts)
+    - [Custom keyboard shortcuts](#custom-keyboard-shortcuts)
+    - [Supported Flex version](#supported-flex-version)
+  - [Development](#development)
+- [Configuration](#configuration)
+  - [Requirements](#requirements)
+  - [Setup](#setup)
+  - [Flex Plugin](#flex-plugin)
+    - [Development](#development-1)
+    - [Deploy your Flex Plugin](#deploy-your-flex-plugin)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
+
+---
 
 ## What does it do?
 
-The _Keyboard Shortcuts Manager_ Twilio Flex plugin empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex. The plugin is available to both agents and supervisors alike and it allows the following functionalities:
+The _Keyboard Shortcuts Manager_ Twilio Flex plugin empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex.
+
+## How does this work?
+
+With the release of Flex 2.1, Flex now supports keyboards shortcuts for the most common actions performed by agents. The official documentation can be found [here](https://www.twilio.com/docs/flex/end-user-guide/keyboard-shortcuts).
+
+The 2.1 Flex UI exposes various APIs to interact with the default keyboard shortcuts, as well as adding custom ones. The official documentation can be found [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts).
+
+The plugin is available to both agents and supervisors alike and it allows the following functionalities:
 
 **View default Flex keyboard shortcuts:**
 
-<img width="700px" src="./screenshots/default-keyboard-shortcuts.png"/>
+<img width="100%" src="./screenshots/default-keyboard-shortcuts.png"/>
 
 This view allows users to see the default Flex keyboard shortcuts and their current mappings.
 
 **View custom Flex keyboard shortcuts**
 
-<img width="700px" src="./screenshots/custom-keyboard-shortcuts.png"/>
+<img width="100%" src="./screenshots/custom-keyboard-shortcuts.png"/>
 
 This view allows users to see custom added keyboard shortcuts and their current mappings.
 
@@ -46,15 +76,13 @@ This view allows users to see custom added keyboard shortcuts and their current 
 
 ![](./screenshots/reset-shortcuts.gif)
 
-## How does this work?
-
-With the release of Flex 2.1, Flex now supports keyboards shortcuts for the most common actions performed by agents. The official documentation can be found [here](https://www.twilio.com/docs/flex/end-user-guide/keyboard-shortcuts).
-
-The 2.1 Flex UI exposes various APIs to interact with the default keyboard shortcuts, as well as adding custom ones. The official documentation can be found [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts).
-
 ### How are you persisting changes between refreshes?
 
 User modification to both default and custom keyboard shortcuts are stored into browser local storage and read during plugin initialization.
+
+### Default keyboard shortcuts
+
+### Custom keyboard shortcuts
 
 ### Supported Flex version
 
