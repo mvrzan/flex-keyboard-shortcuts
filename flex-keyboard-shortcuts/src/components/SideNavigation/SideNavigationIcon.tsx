@@ -1,4 +1,5 @@
 import { SideLink, Actions } from '@twilio/flex-ui';
+import { useEffect } from 'react';
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 import { getUserConfig } from '../../utils/KeyboardShortcutsUtil';
 interface SideNavigationProps {
@@ -7,12 +8,15 @@ interface SideNavigationProps {
 }
 
 const SideNavigationIcon = ({ activeView, viewName }: SideNavigationProps) => {
-  getUserConfig();
   const navigateHandler = () => {
     Actions.invokeAction('NavigateToView', {
       viewName: viewName,
     });
   };
+
+  useEffect(() => {
+    getUserConfig();
+  }, []);
 
   return (
     <SideLink
