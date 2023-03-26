@@ -34,7 +34,7 @@ const Settings = ({
   const toasterShortcutsDisabledNotification = (): void => {
     toaster.push({
       message: `All keyboard shortcuts have been disabled.`,
-      variant: 'error',
+      variant: 'success',
       dismissAfter: 4000,
     });
   };
@@ -42,7 +42,7 @@ const Settings = ({
   const toasterResetNotification = (): void => {
     toaster.push({
       message: `All keyboard shortcuts have been reset to the default values!`,
-      variant: 'warning',
+      variant: 'success',
       dismissAfter: 4000,
     });
   };

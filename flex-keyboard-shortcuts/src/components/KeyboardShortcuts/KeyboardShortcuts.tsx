@@ -34,7 +34,7 @@ const KeyboardShortcuts = () => {
   const toasterDeleteNotification = (actionName: string) => {
     toaster.push({
       message: `Keyboard shortcut named ${actionName} has been successfully deleted.`,
-      variant: 'warning',
+      variant: 'success',
       dismissAfter: 4000,
     });
   };
