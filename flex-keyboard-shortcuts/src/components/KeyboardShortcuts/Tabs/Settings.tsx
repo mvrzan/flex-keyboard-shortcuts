@@ -183,6 +183,11 @@ const Settings = ({
               <Button
                 variant="destructive"
                 onClick={() => setDisableAllSetting(true)}
+                disabled={
+                  readFromLocalStorage('removeAllShortcuts') === 'true'
+                    ? true
+                    : false
+                }
               >
                 Remove all shortcuts
               </Button>
