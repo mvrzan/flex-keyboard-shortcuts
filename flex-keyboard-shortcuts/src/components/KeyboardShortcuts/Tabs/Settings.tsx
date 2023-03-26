@@ -39,20 +39,22 @@ const Settings = ({
   const localThrottlingSetting = readFromLocalStorage(enableThrottling);
   const localRemoveAllSetting = readFromLocalStorage(removeAllShortcuts);
 
-  const toasterShortcutsDisabledNotification = (): void => {
-    toaster.push({
-      message: `All keyboard shortcuts have been disabled.`,
-      variant: 'success',
-      dismissAfter: 4000,
-    });
-  };
-
-  const toasterResetNotification = (): void => {
-    toaster.push({
-      message: `All keyboard shortcuts have been reset to the default values!`,
-      variant: 'success',
-      dismissAfter: 4000,
-    });
+  const toasterNotification = (setting: string): void => {
+    if (setting === 'reset') {
+      console.log('reset was pressed');
+      toaster.push({
+        message: `All keyboard shortcuts have been reset to the default values!`,
+        variant: 'success',
+        dismissAfter: 4000,
+      });
+    }
+    if (setting === 'remove') {
+      toaster.push({
+        message: `All keyboard shortcuts have been disabled.`,
+        variant: 'success',
+        dismissAfter: 4000,
+      });
+    }
   };
 
   const throttlingHandler = (): void => {
@@ -77,7 +79,7 @@ const Settings = ({
     disableKeyboardShortcutsUtil();
     setDisableShortcuts(true);
     setDisableAllSetting(false);
-    toasterShortcutsDisabledNotification();
+    toasterNotification('remove');
     writeToLocalStorage(
       removeAllShortcuts,
       readFromLocalStorage(removeAllShortcuts) === 'true' ? 'false' : 'true'
@@ -96,7 +98,7 @@ const Settings = ({
 
     setReset(true);
 
-    toasterResetNotification();
+    toasterNotification('reset');
     resetKeyboardShortcutsUtil();
   };
 
