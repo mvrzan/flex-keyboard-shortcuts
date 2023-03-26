@@ -41,7 +41,6 @@ const Settings = ({
 
   const toasterNotification = (setting: string): void => {
     if (setting === 'reset') {
-      console.log('reset was pressed');
       toaster.push({
         message: `All keyboard shortcuts have been reset to the default values!`,
         variant: 'success',
@@ -62,7 +61,7 @@ const Settings = ({
     setIsThrottleEnabled(!throttlingToggle);
     writeToLocalStorage(
       enableThrottling,
-      readFromLocalStorage('enableThrottling') === 'true' ? 'false' : 'true'
+      readFromLocalStorage(enableThrottling) === 'true' ? 'false' : 'true'
     );
   };
 
@@ -70,8 +69,8 @@ const Settings = ({
     setIsDeleteShortcutsEnabled(!deleteToggle);
     setDeleteToggle(!deleteToggle);
     writeToLocalStorage(
-      'deleteShortcuts',
-      readFromLocalStorage('deleteShortcuts') === 'true' ? 'false' : 'true'
+      deleteShortcuts,
+      readFromLocalStorage(deleteShortcuts) === 'true' ? 'false' : 'true'
     );
   };
 
