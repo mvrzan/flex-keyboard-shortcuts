@@ -8,6 +8,14 @@ import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
 import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
 import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
 
+import { deleteShortcuts } from '../../../utils/constants';
+import { enableThrottling } from '../../../utils/constants';
+import { removeAllShortcuts } from '../../../utils/constants';
+import { deleteSettingExplanation } from '../../../utils/constants';
+import { throttleSettingExplanation } from '../../../utils/constants';
+import { removeAllSettingExplanation } from '../../../utils/constants';
+import { resetShortcutsSettingExplanation } from '../../../utils/constants';
+
 interface SettingsProps {
   setReset: Dispatch<SetStateAction<boolean>>;
   setDisableShortcuts: Dispatch<SetStateAction<boolean>>;
@@ -27,9 +35,9 @@ const Settings = ({
   const [resetSetting, setResetSetting] = useState<boolean>(false);
   const toaster = useToaster();
 
-  const localDeleteSetting = readFromLocalStorage('deleteShortcuts');
-  const localThrottlingSetting = readFromLocalStorage('enableThrottling');
-  const localRemoveAllSetting = readFromLocalStorage('removeAllShortcuts');
+  const localDeleteSetting = readFromLocalStorage(deleteShortcuts);
+  const localThrottlingSetting = readFromLocalStorage(enableThrottling);
+  const localRemoveAllSetting = readFromLocalStorage(removeAllShortcuts);
 
   const toasterShortcutsDisabledNotification = (): void => {
     toaster.push({
@@ -51,7 +59,7 @@ const Settings = ({
     setThrottlingToggle(!throttlingToggle);
     setIsThrottleEnabled(!throttlingToggle);
     writeToLocalStorage(
-      'enableThrottling',
+      enableThrottling,
       readFromLocalStorage('enableThrottling') === 'true' ? 'false' : 'true'
     );
   };
@@ -71,8 +79,8 @@ const Settings = ({
     setDisableAllSetting(false);
     toasterShortcutsDisabledNotification();
     writeToLocalStorage(
-      'removeAllShortcuts',
-      readFromLocalStorage('removeAllShortcuts') === 'true' ? 'false' : 'true'
+      removeAllShortcuts,
+      readFromLocalStorage(removeAllShortcuts) === 'true' ? 'false' : 'true'
     );
   };
 
@@ -124,12 +132,7 @@ const Settings = ({
           <Heading as="h5" variant="heading50">
             Enable key throttling
           </Heading>
-          <Paragraph>
-            The throttle time in milliseconds which can be set to prevent the
-            shortcut from being triggered again within the set amount of time.
-            Default value is 50ms to prevent Flex from being overloaded by
-            repeated firings, and to provide a more seamless visual experience.
-          </Paragraph>
+          <Paragraph>{throttleSettingExplanation}</Paragraph>
           <Switch
             value="throttling"
             checked={throttlingToggle}
@@ -142,10 +145,7 @@ const Settings = ({
           <Heading as="h5" variant="heading50">
             Delete individual shortcuts
           </Heading>
-          <Paragraph>
-            This setting enables the Agent to delete individual keyboard
-            shortcut mappings.
-          </Paragraph>
+          <Paragraph>{deleteSettingExplanation}</Paragraph>
           <Switch
             value="delete"
             checked={deleteToggle}
@@ -158,12 +158,7 @@ const Settings = ({
           <Heading as="h5" variant="heading50">
             Remove all shortcuts
           </Heading>
-          <Paragraph>
-            Remove and disable all keyboard shortcuts, including the custom
-            ones; your shortcuts will no longer work. Please keep in mind that
-            this is an irreversible action and you will have to reconfigure all
-            of your keyboard shortcuts.
-          </Paragraph>
+          <Paragraph>{removeAllSettingExplanation}</Paragraph>
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {disableAllSetting ? (
             <Stack orientation="horizontal" spacing="space30">
@@ -184,7 +179,7 @@ const Settings = ({
                 variant="destructive"
                 onClick={() => setDisableAllSetting(true)}
                 disabled={
-                  readFromLocalStorage('removeAllShortcuts') === 'true'
+                  readFromLocalStorage(removeAllShortcuts) === 'true'
                     ? true
                     : false
                 }
@@ -198,11 +193,7 @@ const Settings = ({
           <Heading as="h5" variant="heading50">
             Reset keyboard shortcut settings
           </Heading>
-          <Paragraph>
-            Reset all of your keyboard shortcuts to the default values. This
-            option will delete all of the custom shortcut mappings and revert
-            them to their original values. This is an irreversible action.
-          </Paragraph>
+          <Paragraph>{resetShortcutsSettingExplanation}</Paragraph>
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {resetSetting ? (
             <Stack orientation="horizontal" spacing="space30">

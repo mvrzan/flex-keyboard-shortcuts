@@ -6,6 +6,7 @@ import { ShortcutsObject } from '../../types/types';
 import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
 import { getCurrentShortcuts } from '../../utils/KeyboardShortcutsUtil';
 import { deleteShortcutsUtil } from '../../utils/KeyboardShortcutsUtil';
+import { shortcutsConfig } from '../../utils/constants';
 
 interface DeleteButtonProps {
   actionName: string;
@@ -30,7 +31,7 @@ const DeleteButton = ({
 
     deleteShortcutsUtil(shortcutKey);
     toasterDeleteNotification(actionName);
-    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
+    writeToLocalStorage(shortcutsConfig, getCurrentShortcuts());
   };
 
   return (

@@ -10,6 +10,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
 import KeyCommand from './KeyCommand';
 
 import { ShortcutsObject } from '../../types/types';
+import { shortcutsConfig } from '../../utils/constants';
 import { getCamelCase } from '../../utils/KeyboardShortcutsUtil';
 import { getAllActions } from '../../utils/KeyboardShortcutsUtil';
 import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
@@ -85,7 +86,7 @@ const ModalWindow = ({
     closeModalHandler();
     setNewShortcut('');
     setThrottleValue('');
-    writeToLocalStorage('shortcutsConfig', getCurrentShortcuts());
+    writeToLocalStorage(shortcutsConfig, getCurrentShortcuts());
     toasterSuccessNotification(
       selectedActionName,
       selectedShortcutKey,

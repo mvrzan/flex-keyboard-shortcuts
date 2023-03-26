@@ -8,6 +8,11 @@ import { readFromLocalStorage } from './LocalStorageUtil';
 import { presetCustomShortcuts } from './CustomKeyboardShortcuts';
 import { deleteMultipleFromLocalStorage } from './LocalStorageUtil';
 
+import { shortcutsConfig } from './constants';
+import { deleteShortcuts } from './constants';
+import { enableThrottling } from './constants';
+import { removeAllShortcuts } from './constants';
+
 export const getCurrentShortcuts = (): KeyboardShortcuts => {
   return Flex.KeyboardShortcutManager.keyboardShortcuts;
 };
@@ -27,10 +32,10 @@ export const disableKeyboardShortcutsUtil = (): void => {
 export const resetKeyboardShortcutsUtil = (): void => {
   disableKeyboardShortcutsUtil();
   deleteMultipleFromLocalStorage([
-    'deleteShortcuts',
-    'enableThrottling',
-    'removeAllShortcuts',
-    'shortcutsConfig',
+    deleteShortcuts,
+    enableThrottling,
+    removeAllShortcuts,
+    shortcutsConfig,
   ]);
   shortcutInitUtil(Flex.defaultKeyboardShortcuts);
 };
@@ -100,7 +105,7 @@ export const getDefaultShortcuts = (): ShortcutsObject[] => {
 
 export const getCustomShortcuts = (): ShortcutsObject[] => {
   getUserConfig();
-  if (readFromLocalStorage('shortcutsConfig') === (undefined || null)) {
+  if (readFromLocalStorage(shortcutsConfig) === (undefined || null)) {
     addKeyboardShortcutUtil(presetCustomShortcuts);
   }
 
@@ -119,7 +124,7 @@ export const getCustomShortcuts = (): ShortcutsObject[] => {
 };
 
 export const getUserConfig = (): void => {
-  const localConfig = readFromLocalStorage('shortcutsConfig');
+  const localConfig = readFromLocalStorage(shortcutsConfig);
 
   if (localConfig) {
     addKeyboardShortcutUtil(presetCustomShortcuts);
