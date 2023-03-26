@@ -56,7 +56,7 @@ const ModalWindow = ({
   const saveHandler = (): void => {
     const actionFunction = getCamelCase(selectedActionName);
     const shortcutKeys = getAllShortcuts().map(item => item.key);
-    const parsedShortcut =
+    let parsedShortcut =
       typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
     const indexPosition = shortcutKeys.indexOf(parsedShortcut);
     const shortcutObject = {
@@ -75,10 +75,19 @@ const ModalWindow = ({
       return;
     }
 
-    remapKeyboardShortcutUtil(selectedShortcutKey, newShortcut, shortcutObject);
+    if (parsedShortcut === '' && throttleValue) {
+      parsedShortcut = selectedShortcutKey;
+    }
+
+    remapKeyboardShortcutUtil(
+      selectedShortcutKey,
+      parsedShortcut,
+      shortcutObject
+    );
 
     const updatedShortcuts = shortcuts.map(item => item.key);
-    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].key = newShortcut;
+    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].key =
+      parsedShortcut === '' ? selectedShortcutKey : parsedShortcut;
     shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].throttle =
       +throttleValue;
     setShortcuts(shortcuts);
@@ -99,6 +108,9 @@ const ModalWindow = ({
       setIsSaveButtonVisible(false);
     }
     if (newShortcut !== '') {
+      setIsSaveButtonVisible(true);
+    }
+    if (newShortcut === '' && throttleValue) {
       setIsSaveButtonVisible(true);
     }
 
