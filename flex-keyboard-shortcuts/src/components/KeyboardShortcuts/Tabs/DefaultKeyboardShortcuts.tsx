@@ -91,7 +91,7 @@ const DefaultKeyboardShortcutsView = ({
           {/* Present a table if there are shortcuts to present */}
           <Box overflowY="auto" maxHeight="1000px">
             <Table>
-              <THead stickyHeader top={0}>
+              <THead>
                 <Tr>
                   <Th>
                     <Stack orientation="horizontal" spacing="space30">
