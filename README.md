@@ -16,6 +16,7 @@ Twilio Flex plugin that empowers contact center users to configure default and c
     - [Default keyboard shortcuts](#default-keyboard-shortcuts)
     - [Custom keyboard shortcuts](#custom-keyboard-shortcuts)
     - [Supported Flex version](#supported-flex-version)
+  - [Known Issues](#known-issues)
   - [Development](#development)
 - [Configuration](#configuration)
   - [Requirements](#requirements)
@@ -113,6 +114,10 @@ With the help of new Flex APIs, it is possible to add custom shortcuts like desc
 ### Supported Flex version
 
 This plugin only supports Twilio Flex 2.1 and above because support for keyboard shortcuts has been introduced with Flex 2.1.
+
+## Known Issues
+
+The only known issue at the moment is that the number `2` mapping does not work. There are no errors captured, but at the moment, it will simply not map any new actions to that keybind.
 
 ## Development
 
