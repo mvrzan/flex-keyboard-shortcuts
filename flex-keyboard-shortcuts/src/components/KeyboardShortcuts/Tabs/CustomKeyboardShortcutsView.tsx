@@ -117,46 +117,44 @@ const CustomKeyboardShortcutsView = ({
                 </Tr>
               </THead>
               <TBody>
-                {customShortcuts.map(item => {
-                  return (
-                    <Tr key={item.key}>
+                {customShortcuts.map(item => (
+                  <Tr key={item.key}>
+                    <Td>
+                      <KeyCommand keyCommand="Ctrl" /> +{' '}
+                      <KeyCommand keyCommand="Shift" />
+                    </Td>
+                    <Td>
+                      <KeyCommand keyCommand={item.key} />{' '}
+                    </Td>
+                    <Td>{item.actionName}</Td>
+                    {isThrottleEnabled && (
                       <Td>
-                        <KeyCommand keyCommand="Ctrl" /> +{' '}
-                        <KeyCommand keyCommand="Shift" />
+                        {item.throttle ? item.throttle : 'Not configured'}
                       </Td>
-                      <Td>
-                        <KeyCommand keyCommand={item.key} />{' '}
-                      </Td>
-                      <Td>{item.actionName}</Td>
-                      {isThrottleEnabled && (
-                        <Td>
-                          {item.throttle ? item.throttle : 'Not configured'}
-                        </Td>
-                      )}
-                      <Td>
-                        <Stack orientation="horizontal" spacing="space30">
-                          <EditButton
+                    )}
+                    <Td>
+                      <Stack orientation="horizontal" spacing="space30">
+                        <EditButton
+                          shortcutKey={item.key}
+                          throttle={item.throttle}
+                          actionName={item.actionName}
+                          openModalHandler={openModalHandler}
+                        />
+                        {isDeleteShortcutsEnabled && (
+                          <DeleteButton
                             shortcutKey={item.key}
-                            throttle={item.throttle}
                             actionName={item.actionName}
-                            openModalHandler={openModalHandler}
+                            shortcuts={customShortcuts}
+                            setShortcuts={setCustomShortcuts}
+                            toasterDeleteNotification={
+                              toasterDeleteNotification
+                            }
                           />
-                          {isDeleteShortcutsEnabled && (
-                            <DeleteButton
-                              shortcutKey={item.key}
-                              actionName={item.actionName}
-                              shortcuts={customShortcuts}
-                              setShortcuts={setCustomShortcuts}
-                              toasterDeleteNotification={
-                                toasterDeleteNotification
-                              }
-                            />
-                          )}
-                        </Stack>
-                      </Td>
-                    </Tr>
-                  );
-                })}
+                        )}
+                      </Stack>
+                    </Td>
+                  </Tr>
+                ))}
               </TBody>
             </Table>
             <ModalWindow
