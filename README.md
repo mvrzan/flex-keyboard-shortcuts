@@ -26,6 +26,7 @@ Twilio Flex plugin that empowers contact center users to configure default and c
     - [Deploy your Flex Plugin](#deploy-your-flex-plugin)
   - [License](#license)
   - [Disclaimer](#disclaimer)
+  - [Kudos](#kudos)
 
 ---
 
@@ -195,3 +196,7 @@ You are all set to test this plugin on your Flex application!
 ## Disclaimer
 
 This software is to be considered "sample code", a Type B Deliverable, and is delivered "as-is" to the user. Twilio bears no responsibility to support the use or implementation of this software.
+
+## Kudos
+
+Special thanks to my buddy [Mike Schmitt](https://github.com/mschmitt19) for his insights, testing, and input; I appreciate you.
