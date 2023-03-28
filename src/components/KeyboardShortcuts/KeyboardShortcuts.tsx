@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
 
+import { useTabState } from '@twilio-paste/core';
 import { Box, Heading } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
@@ -16,6 +17,7 @@ const KeyboardShortcuts = () => {
   const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
   const [reset, setReset] = useState(false);
   const randomComponentId = useUID();
+  const { ...tabState } = useTabState();
   const toaster = useToaster();
 
   const toasterSuccessNotification = (
@@ -48,6 +50,7 @@ const KeyboardShortcuts = () => {
         selectedId={randomComponentId}
         baseId="vertical-tabs-example"
         orientation="vertical"
+        state={tabState}
       >
         <TabList aria-label="Vertical product tabs">
           <Tab id={randomComponentId}>Default keyboard shortcuts</Tab>
@@ -87,6 +90,7 @@ const KeyboardShortcuts = () => {
               Keyboard shortcuts settings
             </Heading>
             <Settings
+              tabState={tabState}
               setReset={setReset}
               setDisableShortcuts={setDisableShortcuts}
               setIsThrottleEnabled={setIsThrottleEnabled}

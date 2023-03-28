@@ -2,6 +2,7 @@ import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
+import { TabPrimitiveInitialState } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
 import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
@@ -17,6 +18,7 @@ import { removeAllSettingExplanation } from '../../../utils/constants';
 import { resetShortcutsSettingExplanation } from '../../../utils/constants';
 
 interface SettingsProps {
+  tabState: TabPrimitiveInitialState;
   setReset: Dispatch<SetStateAction<boolean>>;
   setDisableShortcuts: Dispatch<SetStateAction<boolean>>;
   setIsThrottleEnabled: Dispatch<SetStateAction<boolean>>;
@@ -24,6 +26,7 @@ interface SettingsProps {
 }
 
 const Settings = ({
+  tabState,
   setReset,
   setDisableShortcuts,
   setIsThrottleEnabled,
@@ -123,6 +126,11 @@ const Settings = ({
     setIsThrottleEnabled,
     setDisableShortcuts,
   ]);
+
+  useEffect(() => {
+    setDisableAllSetting(false);
+    setResetSetting(false);
+  }, [tabState]);
 
   return (
     <>
