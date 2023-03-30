@@ -7,7 +7,7 @@ import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 
 import Settings from './Tabs/Settings';
-import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcuts';
+import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcutsView';
 import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 
 const KeyboardShortcuts = () => {
@@ -48,7 +48,7 @@ const KeyboardShortcuts = () => {
       </Heading>
       <Tabs
         selectedId={randomComponentId}
-        baseId="vertical-tabs-example"
+        baseId="options"
         orientation="vertical"
         state={tabState}
       >
