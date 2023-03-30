@@ -1,4 +1,5 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Button, Heading, Stack } from '@twilio-paste/core';
 import { Card, Paragraph, Switch } from '@twilio-paste/core';
@@ -104,7 +105,7 @@ const Settings = ({
     resetKeyboardShortcutsUtil();
   };
 
-  useEffect(() => {
+  const setSettingStateFromLocalStorage = useCallback((): void => {
     if (localDeleteSetting === 'true') {
       setDeleteToggle(true);
       setIsDeleteShortcutsEnabled(true);
@@ -126,6 +127,10 @@ const Settings = ({
     setIsThrottleEnabled,
     setDisableShortcuts,
   ]);
+
+  useEffect(() => {
+    setSettingStateFromLocalStorage();
+  }, [setSettingStateFromLocalStorage]);
 
   useEffect(() => {
     setDisableAllSetting(false);
