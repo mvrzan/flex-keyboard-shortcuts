@@ -77,7 +77,7 @@ const DefaultKeyboardShortcutsView = ({
         <Card>
           <Heading as="h5" variant="heading50">
             <Stack orientation="horizontal" spacing="space20">
-              <WarningIcon decorative={false} title="Description of icon" />
+              <WarningIcon decorative />
               Re-enable Keyboard Shortcuts
             </Stack>
           </Heading>
