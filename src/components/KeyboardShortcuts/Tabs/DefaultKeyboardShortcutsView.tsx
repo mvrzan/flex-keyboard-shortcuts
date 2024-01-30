@@ -1,16 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Paragraph } from '@twilio-paste/core';
-import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
-import { Box, Tooltip, Text, Heading, Stack, Card } from '@twilio-paste/core';
-import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
-import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
+import { useState, useEffect } from "react";
 
-import KeyCommand from '../KeyCommand';
-import EditButton from '../EditButton';
-import DeleteButton from '../DeleteButton';
-import ModalWindow from '../ModalWindow';
-import { ShortcutsObject } from '../../../types/types';
-import { getDefaultShortcuts } from '../../../utils/KeyboardShortcutsUtil';
+import { Box } from "@twilio-paste/core/box";
+import { Text } from "@twilio-paste/core/text";
+import { Card } from "@twilio-paste/core/card";
+import { Stack } from "@twilio-paste/core/stack";
+import { Heading } from "@twilio-paste/core/heading";
+import { Tooltip } from "@twilio-paste/core/tooltip";
+import { Paragraph } from "@twilio-paste/core/paragraph";
+import { Table, THead, Tr, Th, Td, TBody } from "@twilio-paste/core/table";
+
+import { WarningIcon } from "@twilio-paste/icons/esm/WarningIcon";
+import { InformationIcon } from "@twilio-paste/icons/esm/InformationIcon";
+
+import KeyCommand from "../KeyCommand";
+import EditButton from "../EditButton";
+import DeleteButton from "../DeleteButton";
+import ModalWindow from "../ModalWindow";
+import { ShortcutsObject } from "../../../types/types";
+import { getDefaultShortcuts } from "../../../utils/KeyboardShortcutsUtil";
 
 interface DefaultKeyboardShortcutsViewProps {
   reset: boolean;
@@ -38,8 +45,8 @@ const DefaultKeyboardShortcutsView = ({
   );
   const [shortcutsDeleted, setShortcutsDeleted] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
-  const [selectedActionName, setSelectedActionName] = useState<string>('');
+  const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>("");
+  const [selectedActionName, setSelectedActionName] = useState<string>("");
   const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
     0
   );
@@ -120,19 +127,19 @@ const DefaultKeyboardShortcutsView = ({
                 </Tr>
               </THead>
               <TBody>
-                {defaultShortcuts.map(item => (
+                {defaultShortcuts.map((item) => (
                   <Tr key={item.key}>
                     <Td>
-                      <KeyCommand keyCommand="Ctrl" /> +{' '}
+                      <KeyCommand keyCommand="Ctrl" /> +{" "}
                       <KeyCommand keyCommand="Shift" />
                     </Td>
                     <Td>
-                      <KeyCommand keyCommand={item.key} />{' '}
+                      <KeyCommand keyCommand={item.key} />{" "}
                     </Td>
                     <Td>{item.actionName}</Td>
                     {isThrottleEnabled && (
                       <Td>
-                        {item.throttle ? item.throttle : 'Not configured'}
+                        {item.throttle ? item.throttle : "Not configured"}
                       </Td>
                     )}
                     <Td>

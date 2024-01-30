@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import { useUID } from '@twilio-paste/core/uid-library';
+import { useState } from "react";
+import { useUID } from "@twilio-paste/core/uid-library";
 
-import { useTabState } from '@twilio-paste/core';
-import { Box, Heading } from '@twilio-paste/core';
-import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
+import { Box } from "@twilio-paste/core/box";
+import { Heading } from "@twilio-paste/core/heading";
+import { useToaster, Toaster } from "@twilio-paste/core/toast";
+import {
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
+  useTabState,
+} from "@twilio-paste/core/tabs";
 
-import Settings from './Tabs/Settings';
-import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcutsView';
-import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
+import Settings from "./Tabs/Settings";
+import DefaultKeyboardShortcutsView from "./Tabs/DefaultKeyboardShortcutsView";
+import CustomKeyboardShortcutsView from "./Tabs/CustomKeyboardShortcutsView";
 
 const KeyboardShortcuts = () => {
   const [disableShortcuts, setDisableShortcuts] = useState(false);
@@ -28,7 +35,7 @@ const KeyboardShortcuts = () => {
     toaster.push({
       message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut.toUpperCase()}!
       Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut.toUpperCase()}`,
-      variant: 'success',
+      variant: "success",
       dismissAfter: 6000,
     });
   };
@@ -36,7 +43,7 @@ const KeyboardShortcuts = () => {
   const toasterDeleteNotification = (actionName: string) => {
     toaster.push({
       message: `Keyboard shortcut named ${actionName} has been successfully deleted.`,
-      variant: 'success',
+      variant: "success",
       dismissAfter: 4000,
     });
   };

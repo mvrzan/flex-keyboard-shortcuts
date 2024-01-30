@@ -1,5 +1,5 @@
-import { Button } from '@twilio-paste/core';
-import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
+import { Button } from "@twilio-paste/core/button";
+import { EditIcon } from "@twilio-paste/icons/esm/EditIcon";
 
 interface EditButtonProps {
   actionName: string;

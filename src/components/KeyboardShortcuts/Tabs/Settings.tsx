@@ -1,22 +1,31 @@
-import { Dispatch, SetStateAction } from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
-import { Button, Heading, Stack } from '@twilio-paste/core';
-import { Card, Paragraph, Switch } from '@twilio-paste/core';
-import { TabPrimitiveInitialState } from '@twilio-paste/core';
-import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
-import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
-import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
-import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
+import { Card } from "@twilio-paste/core/card";
+import { Stack } from "@twilio-paste/core/stack";
+import { Button } from "@twilio-paste/core/button";
+import { Switch } from "@twilio-paste/core/switch";
+import { Heading } from "@twilio-paste/core/heading";
+import { Paragraph } from "@twilio-paste/core/paragraph";
+import { TabPrimitiveInitialState } from "@twilio-paste/core";
+import { useToaster, Toaster } from "@twilio-paste/core/toast";
+import { writeToLocalStorage } from "../../../utils/LocalStorageUtil";
+import { readFromLocalStorage } from "../../../utils/LocalStorageUtil";
+import { resetKeyboardShortcutsUtil } from "../../../utils/KeyboardShortcutsUtil";
+import { disableKeyboardShortcutsUtil } from "../../../utils/KeyboardShortcutsUtil";
 
-import { deleteShortcuts } from '../../../utils/constants';
-import { enableThrottling } from '../../../utils/constants';
-import { removeAllShortcuts } from '../../../utils/constants';
-import { deleteSettingExplanation } from '../../../utils/constants';
-import { throttleSettingExplanation } from '../../../utils/constants';
-import { removeAllSettingExplanation } from '../../../utils/constants';
-import { resetShortcutsSettingExplanation } from '../../../utils/constants';
+import { deleteShortcuts } from "../../../utils/constants";
+import { enableThrottling } from "../../../utils/constants";
+import { removeAllShortcuts } from "../../../utils/constants";
+import { deleteSettingExplanation } from "../../../utils/constants";
+import { throttleSettingExplanation } from "../../../utils/constants";
+import { removeAllSettingExplanation } from "../../../utils/constants";
+import { resetShortcutsSettingExplanation } from "../../../utils/constants";
 
 interface SettingsProps {
   tabState: TabPrimitiveInitialState;
@@ -44,17 +53,17 @@ const Settings = ({
   const localRemoveAllSetting = readFromLocalStorage(removeAllShortcuts);
 
   const toasterNotification = (setting: string): void => {
-    if (setting === 'reset') {
+    if (setting === "reset") {
       toaster.push({
         message: `All keyboard shortcuts have been reset to the default values!`,
-        variant: 'success',
+        variant: "success",
         dismissAfter: 4000,
       });
     }
-    if (setting === 'remove') {
+    if (setting === "remove") {
       toaster.push({
         message: `All keyboard shortcuts have been disabled.`,
-        variant: 'success',
+        variant: "success",
         dismissAfter: 4000,
       });
     }
@@ -65,7 +74,7 @@ const Settings = ({
     setIsThrottleEnabled(!throttlingToggle);
     writeToLocalStorage(
       enableThrottling,
-      readFromLocalStorage(enableThrottling) === 'true' ? 'false' : 'true'
+      readFromLocalStorage(enableThrottling) === "true" ? "false" : "true"
     );
   };
 
@@ -74,7 +83,7 @@ const Settings = ({
     setDeleteToggle(!deleteToggle);
     writeToLocalStorage(
       deleteShortcuts,
-      readFromLocalStorage(deleteShortcuts) === 'true' ? 'false' : 'true'
+      readFromLocalStorage(deleteShortcuts) === "true" ? "false" : "true"
     );
   };
 
@@ -82,10 +91,10 @@ const Settings = ({
     disableKeyboardShortcutsUtil();
     setDisableShortcuts(true);
     setDisableAllSetting(false);
-    toasterNotification('remove');
+    toasterNotification("remove");
     writeToLocalStorage(
       removeAllShortcuts,
-      readFromLocalStorage(removeAllShortcuts) === 'true' ? 'false' : 'true'
+      readFromLocalStorage(removeAllShortcuts) === "true" ? "false" : "true"
     );
   };
 
@@ -101,20 +110,20 @@ const Settings = ({
 
     setReset(true);
 
-    toasterNotification('reset');
+    toasterNotification("reset");
     resetKeyboardShortcutsUtil();
   };
 
   const setSettingStateFromLocalStorage = useCallback((): void => {
-    if (localDeleteSetting === 'true') {
+    if (localDeleteSetting === "true") {
       setDeleteToggle(true);
       setIsDeleteShortcutsEnabled(true);
     }
-    if (localThrottlingSetting === 'true') {
+    if (localThrottlingSetting === "true") {
       setThrottlingToggle(true);
       setIsThrottleEnabled(true);
     }
-    if (localRemoveAllSetting === 'true') {
+    if (localRemoveAllSetting === "true") {
       setDisableAllSetting(false);
       setDisableShortcuts(true);
       disableKeyboardShortcutsUtil();
@@ -193,7 +202,7 @@ const Settings = ({
                 variant="destructive"
                 onClick={() => setDisableAllSetting(true)}
                 disabled={
-                  readFromLocalStorage(removeAllShortcuts) === 'true'
+                  readFromLocalStorage(removeAllShortcuts) === "true"
                     ? true
                     : false
                 }
