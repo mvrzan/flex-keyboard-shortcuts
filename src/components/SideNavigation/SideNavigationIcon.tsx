@@ -1,18 +1,22 @@
-import { SideLink, Actions } from '@twilio/flex-ui';
-import { useEffect } from 'react';
-import { KeyboardIcon, KeyboardIconFilled } from '../../utils/KeyboardIcons';
-import { getCustomShortcuts } from '../../utils/KeyboardShortcutsUtil';
-import { getDefaultShortcuts } from '../../utils/KeyboardShortcutsUtil';
+import { SideLink, Actions } from "@twilio/flex-ui";
+import { useEffect } from "react";
+import { KeyboardIcon, KeyboardIconFilled } from "../../utils/KeyboardIcons";
+import { getCustomShortcuts } from "../../utils/KeyboardShortcutsUtil";
+import { getDefaultShortcuts } from "../../utils/KeyboardShortcutsUtil";
 interface SideNavigationProps {
   activeView?: string;
   viewName: string;
 }
 
 const SideNavigationIcon = ({ activeView, viewName }: SideNavigationProps) => {
-  const navigateHandler = () => {
-    Actions.invokeAction('NavigateToView', {
-      viewName: viewName,
-    });
+  const navigateHandler = async () => {
+    try {
+      await Actions.invokeAction("NavigateToView", {
+        viewName: viewName,
+      });
+    } catch (error) {
+      console.error("Error navigating to view", error);
+    }
   };
 
   useEffect(() => {
