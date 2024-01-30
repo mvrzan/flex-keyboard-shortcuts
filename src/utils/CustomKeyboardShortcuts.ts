@@ -1,35 +1,59 @@
-import * as Flex from '@twilio/flex-ui';
+import * as Flex from "@twilio/flex-ui";
 
-const toggleDialpad = () => {
-  Flex.Actions.invokeAction('ToggleOutboundDialer');
+const toggleDialpad = async () => {
+  try {
+    await Flex.Actions.invokeAction("ToggleOutboundDialer");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const toggleSidebar = () => {
-  Flex.Actions.invokeAction('ToggleSidebar');
+const toggleSidebar = async () => {
+  try {
+    await Flex.Actions.invokeAction("ToggleSidebar");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const navigateToTasks = () => {
-  Flex.Actions.invokeAction('NavigateToView', {
-    viewName: 'agent-desktop',
-  });
+const navigateToTasks = async () => {
+  try {
+    await Flex.Actions.invokeAction("NavigateToView", {
+      viewName: "agent-desktop",
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const navigateToKeyboardShortcuts = () => {
-  Flex.Actions.invokeAction('NavigateToView', {
-    viewName: 'keyboard-shortcuts',
-  });
+const navigateToKeyboardShortcuts = async () => {
+  try {
+    await Flex.Actions.invokeAction("NavigateToView", {
+      viewName: "keyboard-shortcuts",
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const navigateToTeamsView = () => {
-  Flex.Actions.invokeAction('NavigateToView', {
-    viewName: 'teams',
-  });
+const navigateToTeamsView = async () => {
+  try {
+    await Flex.Actions.invokeAction("NavigateToView", {
+      viewName: "teams",
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const navigateToQueuesView = () => {
-  Flex.Actions.invokeAction('NavigateToView', {
-    viewName: 'queues-stats',
-  });
+const navigateToQueuesView = async () => {
+  try {
+    await Flex.Actions.invokeAction("NavigateToView", {
+      viewName: "queues-stats",
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const debuggingHelper = () => {
@@ -45,27 +69,27 @@ const debuggingHelper = () => {
 };
 
 export const presetCustomShortcuts = {
-  D: { action: toggleDialpad, name: 'Toggle dialpad', throttle: 100 },
-  Q: { action: toggleSidebar, name: 'Toggle sidebar', throttle: 100 },
-  K: { action: navigateToTasks, name: 'Navigate to tasks', throttle: 100 },
+  D: { action: toggleDialpad, name: "Toggle dialpad", throttle: 100 },
+  Q: { action: toggleSidebar, name: "Toggle sidebar", throttle: 100 },
+  K: { action: navigateToTasks, name: "Navigate to tasks", throttle: 100 },
   9: {
     action: debuggingHelper,
-    name: 'Debugging assistance',
+    name: "Debugging assistance",
     throttle: 3000,
   },
   L: {
     action: navigateToKeyboardShortcuts,
-    name: 'Navigate to keyboard shortcuts',
+    name: "Navigate to keyboard shortcuts",
     throttle: 100,
   },
   I: {
     action: navigateToTeamsView,
-    name: 'Navigate to Teams View',
+    name: "Navigate to Teams View",
     throttle: 100,
   },
   O: {
     action: navigateToQueuesView,
-    name: 'Navigate to Real-time Queues View',
+    name: "Navigate to Real-time Queues View",
     throttle: 100,
   },
 };
